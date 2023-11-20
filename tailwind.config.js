@@ -48,6 +48,7 @@ export default {
             primary: '#FFFFFF',
             secondary: '#FDFDFE',
             tertiary: '#F7F8FC',
+            quartenary: '#DCDCDC',
           },
         },
       },

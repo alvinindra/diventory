@@ -2,10 +2,11 @@
 definePageMeta({
   layout: 'dashboard'
 })
+
 </script>
 
 <template>
   <div>
-    Dashboard
+    <BaseTitle title="Kelola Pinjaman" />
   </div>
 </template>

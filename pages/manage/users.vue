@@ -1,4 +1,8 @@
 <script setup>
+useHead({
+  title: 'Kelola Akun'
+})
+
 definePageMeta({
   layout: 'dashboard'
 })

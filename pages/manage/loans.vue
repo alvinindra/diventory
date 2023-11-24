@@ -1,12 +1,11 @@
 <script setup>
 useHead({
-  title: 'Kelola Pinjaman'
+  title: 'Kelola Pinjaman',
 })
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
 })
-
 </script>
 
 <template>

@@ -3,14 +3,16 @@ const items = [
   [{
     label: 'leo@dicoding.com',
     slot: 'account',
-    disabled: true
-  }], [{
+    disabled: true,
+  }],
+  [{
     label: 'Settings',
-    icon: 'i-heroicons-cog-8-tooth'
-  }], [{
+    icon: 'i-heroicons-cog-8-tooth',
+  }],
+  [{
     label: 'Sign out',
-    icon: 'i-heroicons-arrow-left-on-rectangle'
-  }]
+    icon: 'i-heroicons-arrow-left-on-rectangle',
+  }],
 ]
 </script>
 
@@ -49,8 +51,10 @@ const items = [
       <div class="flex items-center gap-3 2xsm:gap-7 ms-auto">
         <!-- User Area -->
         <div class="relative">
-          <UDropdown :items="items" :ui="{ item: { disabled: 'cursor-text select-text' } }"
-            :popper="{ placement: 'bottom-start' }">
+          <UDropdown
+            :items="items" :ui="{ item: { disabled: 'cursor-text select-text' } }"
+            :popper="{ placement: 'bottom-start' }"
+          >
             <div class="flex">
               <UAvatar class="my-auto" src="https://avatars.githubusercontent.com/u/739984?v=4" />
               <div class="my-auto w-[100px] mx-2">
@@ -59,11 +63,14 @@ const items = [
                   Admin
                 </div>
               </div>
-              <svg class="my-auto" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
+              <svg
+                class="my-auto" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <path
                   d="M15.6323 7.29254C15.7655 7.42178 15.8377 7.59456 15.833 7.77291C15.8282 7.95126 15.7469 8.12057 15.607 8.24363L10.5032 12.7308C10.3676 12.8501 10.1874 12.9166 10.0001 12.9166C9.81272 12.9166 9.63257 12.8501 9.49697 12.7308L4.39313 8.24452C4.253 8.12149 4.17156 7.95213 4.16673 7.77368C4.1619 7.59523 4.23407 7.42232 4.36737 7.29299C4.50067 7.16365 4.68418 7.08849 4.87752 7.08403C5.07087 7.07957 5.25821 7.14618 5.39835 7.26921L10.0005 11.3149L14.6027 7.26831C14.7429 7.14545 14.9302 7.07899 15.1234 7.08353C15.3167 7.08807 15.5 7.16325 15.6332 7.29254H15.6323Z"
-                  fill="#3A3A3C" fill-opacity="0.4" />
+                  fill="#3A3A3C" fill-opacity="0.4"
+                />
               </svg>
             </div>
             <template #account="{ item }">

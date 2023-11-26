@@ -6,6 +6,8 @@ export default {
       colors: {
         diventory: {
           primary: {
+            DEFAULT: '#2A68C1',
+            50: '#f0f5fe',
             100: '#D6E6FC',
             200: '#AECDF9',
             300: '#85B4F7',
@@ -15,6 +17,7 @@ export default {
             700: '#1F4E91',
             800: '#153460',
             900: '#0A1A30',
+            950: '#192452',
           },
           secondary: {
             100: '#CCF3F3',

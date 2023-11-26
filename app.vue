@@ -17,8 +17,8 @@ useHead({
 </template>
 
 <style lang="scss">
-* {
-  color: #3A3A3C;
+h1,h2,h3,h4,h5,h6 {
+  @apply text-diventory-black-primary;
 }
 
 ::selection {

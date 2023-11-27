@@ -30,7 +30,7 @@
           <ul class="mb-6 flex flex-col gap-2">
             <li>
               <NuxtLink
-                class="group relative flex items-center gap-3 rounded-sm py-3 px-4 font-medium text-diventory-black-secondary duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+                class="group relative flex items-center gap-3  py-3 px-4 font-medium text-diventory-black-secondary duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
                 to="/dashboard"
                 active-class="text-diventory-primary-600 bg-diventory-primary-100 rounded-[12px]"
               >
@@ -46,7 +46,7 @@
             </li>
             <li>
               <NuxtLink
-                class="group relative flex items-center gap-3 rounded-sm py-3 px-4 font-medium text-diventory-black-secondary duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+                class="group relative flex items-center gap-3  py-3 px-4 font-medium text-diventory-black-secondary duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
                 to="/manage/goods"
                 active-class="text-diventory-primary-600 bg-diventory-primary-100 rounded-[12px]"
               >
@@ -61,7 +61,7 @@
             </li>
             <li>
               <NuxtLink
-                class="group relative flex items-center gap-3 rounded-sm py-3 px-4 font-medium text-diventory-black-secondary duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+                class="group relative flex items-center gap-3  py-3 px-4 font-medium text-diventory-black-secondary duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
                 to="/manage/loans"
                 active-class="text-diventory-primary-600 bg-diventory-primary-100 rounded-[12px]"
               >
@@ -77,7 +77,7 @@
             </li>
             <li>
               <NuxtLink
-                class="group relative flex items-center gap-3 rounded-sm py-3 px-4 font-medium text-diventory-black-secondary duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+                class="group relative flex items-center gap-3  py-3 px-4 font-medium text-diventory-black-secondary duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
                 to="/manage/users"
                 active-class="text-diventory-primary-600 bg-diventory-primary-100 rounded-[12px]"
               >

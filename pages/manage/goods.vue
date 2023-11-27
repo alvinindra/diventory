@@ -1,6 +1,9 @@
 <script setup>
 useHead({
   title: 'Kelola Barang',
+  script: [
+    { src: 'https://unpkg.com/html5-qrcode' },
+  ],
 })
 
 definePageMeta({
@@ -23,10 +26,6 @@ definePageMeta({
       </template>
 
       <ManageGoodsData />
-
-      <template #footer>
-        <Placeholder class="h-8" />
-      </template>
     </UCard>
   </div>
 </template>

@@ -4,6 +4,20 @@ export default {
   theme: {
     extend: {
       colors: {
+        green: {
+          DEFAULT: '#2A68C1',
+          50: '#f0f5fe',
+          100: '#D6E6FC',
+          200: '#AECDF9',
+          300: '#85B4F7',
+          400: '#5D9BF4',
+          500: '#2E47BA',
+          600: '#2A68C1',
+          700: '#1F4E91',
+          800: '#153460',
+          900: '#0A1A30',
+          950: '#192452',
+        },
         diventory: {
           primary: {
             DEFAULT: '#2A68C1',
@@ -18,6 +32,13 @@ export default {
             800: '#153460',
             900: '#0A1A30',
             950: '#192452',
+          },
+          green: {
+            500: '#00B884',
+            600: '#00936A',
+          },
+          red: {
+            500: '#F9405F',
           },
           secondary: {
             100: '#CCF3F3',

@@ -1,6 +1,6 @@
 export default defineAppConfig({
   ui: {
-    primary: 'blue',
+    primary: 'green',
     card: {
       header: {
         padding: 'px-5 pt-4 pb-0',

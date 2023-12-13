@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 
 const props = defineProps(['show'])
@@ -11,6 +10,8 @@ const state = reactive({
   type_goods: undefined,
   status: undefined,
 })
+
+const optionStatusGoods = ['Tersedia', 'Rusak', 'Dipinjam', 'Dikembalikan']
 
 async function onSubmit(event: FormSubmitEvent<object>) {
   // Do something with data
@@ -30,22 +31,23 @@ async function onSubmit(event: FormSubmitEvent<object>) {
       <div class="p-4">
         <UForm :state="state" class="space-y-4" @submit="onSubmit">
           <UFormGroup label="Nama Barang" name="name">
-            <UInput v-model="state.name" />
+            <UInput v-model="state.name" placeholder="Masukkan nama barang" />
           </UFormGroup>
           <UFormGroup label="Serial Number" name="serial_number">
-            <UInput v-model="state.serial_number" type="text" />
+            <UInput v-model="state.serial_number" type="text" placeholder="Masukkan serial number" />
           </UFormGroup>
           <UFormGroup label="Jenis Barang" name="type_goods">
-            <UInput v-model="state.type_goods" type="text" />
+            <UInput v-model="state.type_goods" type="text" placeholder="Masukkan jenis barang" />
           </UFormGroup>
           <UFormGroup label="Status Barang" name="status">
-            <UInput v-model="state.status" type="text" />
+            <USelectMenu v-model="state.status" :options="optionStatusGoods" size="md" placeholder="Pilih status barang" />
           </UFormGroup>
-
-          <UButton type="submit" class="justify-center w-full text-center">
-            Simpan Data
-          </UButton>
         </UForm>
+      </div>
+      <div class="flex p-4 border-top border border-solid">
+        <UButton type="submit" class="justify-center w-full text-center">
+          Simpan Data
+        </UButton>
       </div>
     </div>
   </UModal>

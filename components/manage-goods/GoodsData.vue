@@ -52,6 +52,7 @@ const filterGoods = ['Tersedia', 'Dipinjam', 'Rusak']
 
 const selectedFilter = ref(null)
 const isQrCodeActive = ref(false)
+const modalAddGoods = ref(false)
 </script>
 
 <template>
@@ -59,7 +60,7 @@ const isQrCodeActive = ref(false)
     <UInput v-model="q" icon="i-heroicons-magnifying-glass-20-solid" placeholder="Search" />
     <USelect v-model="selectedFilter" class="ms-4 min-w-[150px]" :options="filterGoods" placeholder="Filter" />
     <UButton icon="i-mdi-line-scan" class="ms-auto bg-diventory-primary-100 text-diventory-primary-600 hover:bg-diventory-primary-200" variant="solid" label="Scan Barang" @click="isQrCodeActive = !isQrCodeActive" />
-    <UButton icon="i-mdi-plus" class="ms-4" variant="solid" label="Tambah Barang" />
+    <UButton icon="i-mdi-plus" class="ms-4" variant="solid" label="Tambah Barang" @click="modalAddGoods = true" />
   </div>
   <UTable v-model="selected" :rows="filteredRows" :columns="columns">
     <template #qrcode-data="{ row }">
@@ -109,4 +110,5 @@ const isQrCodeActive = ref(false)
       />
     </div>
   </UModal>
+  <ManageGoodsModalAddGoods :show="modalAddGoods" @close="modalAddGoods = false" />
 </template>

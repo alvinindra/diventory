@@ -2,6 +2,8 @@
 definePageMeta({
   layout: 'dashboard',
 })
+
+await navigateTo('/manage/goods')
 </script>
 
 <template>

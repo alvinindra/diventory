@@ -25,6 +25,7 @@ export default defineAppConfig({
     },
     input: {
       padding: 'py-2',
+      base: 'disabled:bg-diventory-gray-25 disabled:opacity-100 disabled:text-diventory-black-secondary',
     },
     select: {
       padding: 'py-2',

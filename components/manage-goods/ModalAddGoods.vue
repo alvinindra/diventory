@@ -40,7 +40,7 @@ async function onSubmit(event: FormSubmitEvent<object>) {
             <UInput v-model="state.type_goods" type="text" placeholder="Masukkan jenis barang" />
           </UFormGroup>
           <UFormGroup label="Status Barang" name="status">
-            <USelectMenu v-model="state.status" :options="optionStatusGoods" size="md" placeholder="Pilih status barang" />
+            <USelectMenu v-model="state.status" :options="optionStatusGoods" size="md" placeholder="Pilih status barang" select-class="px-3 py-2" />
           </UFormGroup>
         </UForm>
       </div>

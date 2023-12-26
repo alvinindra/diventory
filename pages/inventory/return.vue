@@ -2,13 +2,27 @@
 useHead({
   title: 'Pengembalian Barang',
 })
+
+const returnSuccess = ref(false)
 </script>
 
 <template>
   <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-diventory-white-tertiary">
     <LayoutAppInventoryNavbar />
     <main class="container px-6 py-8 mx-auto">
-      <div class="flex justify-center gap-5">
+      <div v-if="returnSuccess" class="bg-white max-w-[407px] mx-auto p-8 shadow-md border border-white rounded-[6px] text-center">
+        <img class="mb-[28px] mx-auto" src="/image/icon-checklist.svg" alt="">
+        <div class="text-xl font-medium text-diventory-black-primary mb-2">
+          Barang berhasil dikembalikan
+        </div>
+        <div class="mb-[28px] text-diventory-black-secondary">
+          Terima kasih sudah mengembalikan barang
+        </div>
+        <UButton type="button" class="bg-diventory-primary-600 hover:bg-diventory-primary-500 py-2 justify-center w-full text-center" @click="returnSuccess = !returnSuccess">
+          OK
+        </UButton>
+      </div>
+      <div v-else class="flex justify-center gap-5">
         <div class="p-[20px] flex flex-col shadow max-w[340px] rounded-xl gap-5 bg-white">
           <div class="flex flex-row gap-2">
             <div class="flex flex-col gap-2 my-auto">
@@ -42,11 +56,9 @@ useHead({
               <UInput model-value="8 November 2023" disabled />
             </UFormGroup>
           </UForm>
-          <div>
-            <UButton type="submit" class="bg-diventory-primary-600 hover:bg-diventory-primary-500 py-2 justify-center w-full text-center">
-              Submit
-            </UButton>
-          </div>
+          <UButton type="submit" class="bg-diventory-primary-600 hover:bg-diventory-primary-500 py-2 justify-center w-full text-center" @click="returnSuccess = !returnSuccess">
+            Submit
+          </UButton>
         </div>
       </div>
     </main>

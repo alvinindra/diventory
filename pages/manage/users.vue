@@ -11,5 +11,6 @@ definePageMeta({
 <template>
   <div>
     <BaseTitle title="Kelola Akun" />
+    <ManageUsers />
   </div>
 </template>

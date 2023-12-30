@@ -25,7 +25,7 @@ async function onSubmit(event: FormSubmitEvent<object>) {
     <div class="">
       <div class="p-4 flex border-bottom border border-solid">
         <div class="my-auto text-xl font-medium">
-          Tambah Akun
+          Edit Akun
         </div>
         <UIcon name="i-heroicons-x-mark" class="w-6 h-6 ms-auto my-auto cursor-pointer" @click="emit('close')" />
       </div>

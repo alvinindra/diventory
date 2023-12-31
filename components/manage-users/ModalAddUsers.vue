@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormSubmitEvent } from '#ui/types';
+import type { FormSubmitEvent } from '#ui/types'
 
 const props = defineProps(['show'])
 const emit = defineEmits(['update:show', 'close'])
@@ -41,11 +41,11 @@ async function onSubmit(event: FormSubmitEvent<object>) {
             <UInput v-model="state.username" type="text" placeholder="Masukkan username" />
           </UFormGroup>
           <UFormGroup label="Alamat Email" name="email">
-            <UInput v-model="state.email" type="text" placeholder="Masukkan alamat email" />
-          </UFormGroup> 
+            <UInput v-model="state.email" type="email" placeholder="Masukkan alamat email" />
+          </UFormGroup>
           <UFormGroup label="Password" name="password">
-            <UInput v-model="state.password" type="text" placeholder="Masukkan password" />
-          </UFormGroup>                    
+            <UInput v-model="state.password" type="password" placeholder="Masukkan password" />
+          </UFormGroup>
         </UForm>
       </div>
       <div class="flex p-4 border-top border border-solid">

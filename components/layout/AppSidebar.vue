@@ -28,7 +28,7 @@
         <!-- Menu Group -->
         <div>
           <ul class="mb-6 flex flex-col gap-2">
-            <li>
+            <!-- <li>
               <NuxtLink
                 class="group relative flex items-center gap-3  py-3 px-4 font-medium text-diventory-black-secondary duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
                 to="/dashboard"
@@ -43,7 +43,7 @@
 
                 Dashboard
               </NuxtLink>
-            </li>
+            </li> -->
             <li>
               <NuxtLink
                 class="group relative flex items-center gap-3  py-3 px-4 font-medium text-diventory-black-secondary duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"

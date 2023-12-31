@@ -4,6 +4,7 @@ export default defineNuxtConfig({
     preference: 'light',
   },
   ui: {
+    safelistColors: ['success'],
     icons: ['mdi', 'simple-icons'],
   },
   modules: ['@nuxt/ui', '@pinia/nuxt'],

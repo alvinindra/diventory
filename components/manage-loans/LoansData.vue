@@ -86,27 +86,18 @@ const showModalAccept = ref(false)
     <USelect v-model="selectedFilter" class="ms-4 min-w-[150px]" :options="filterGoods" placeholder="Filter" />
     <UButton icon="i-mdi-line-scan" class="ms-auto bg-diventory-primary-100 text-diventory-primary-600 hover:bg-diventory-primary-200" variant="solid" label="Scan Barang" @click="isQrCodeActive = !isQrCodeActive" />
   </div>
-  <ClientOnly>
-    <photo-provider>
-      <UTable v-model="selected" :rows="filteredRows" :columns="columns">
-        <template #qrcode-data="{ row }">
-          <photo-consumer :key="row.qrcode" :intro="row.qrcode" :src="row.qrcode">
-            <img :src="row.qrcode" class="w-[40px] h-[40px] view-box cursor-pointer" alt="Discover Nuxt 3">
-          </photo-consumer>
-        </template>
-        <template #durasi_peminjaman-data="{ row }">
-          {{ row.durasi_peminjaman }} Tahun
-        </template>
-        <template #status_peminjaman-data="{ row }">
-          <BaseBadge
-            :color="colorStatusPeminjaman(row)"
-            variant="outline"
-            :title="row.status_peminjaman"
-          />
-        </template>
-      </UTable>
-    </photo-provider>
-  </ClientOnly>
+  <UTable v-model="selected" :rows="filteredRows" :columns="columns">
+    <template #durasi_peminjaman-data="{ row }">
+      {{ row.durasi_peminjaman }} Tahun
+    </template>
+    <template #status_peminjaman-data="{ row }">
+      <BaseBadge
+        :color="colorStatusPeminjaman(row)"
+        variant="outline"
+        :title="row.status_peminjaman"
+      />
+    </template>
+  </UTable>
   <UModal v-model="isQrCodeActive">
     <div class="flex px-5 pt-5 pb-4">
       <div class="my-auto font-bold text-xl">

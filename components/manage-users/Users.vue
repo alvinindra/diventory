@@ -16,27 +16,16 @@ const columns = [{
   label: 'Action',
 }]
 
-const users = ref([])
-
-async function getUsers() {
-  try {
-    const { data } = await useCustomFetch('/api/akun/', { method: 'GET' })
-    users.value = data.value
-  }
-  catch (error) {
-    console.error(error)
-  }
-}
-
-getUsers()
+const { data: dataUsers, refresh } = await useCustomFetch('/api/akun/', { method: 'GET' })
 
 const selected = ref([])
+const toast = useToast()
 const q = ref('')
 const filteredRows = computed(() => {
   if (!q.value)
-    return users.value
+    return dataUsers.value
 
-  return users.value.filter((person) => {
+  return dataUsers.value.filter((person) => {
     return Object.values(person).some((value) => {
       return String(value).toLowerCase().includes(q.value.toLowerCase())
     })
@@ -52,6 +41,26 @@ const showModalDelete = ref(false)
 function showDetailUser(row) {
   selectedUser.value = row
   modalDetailUser.value = !modalDetailUser.value
+}
+
+function showModalDeleteUser(row) {
+  selectedUser.value = row
+  showModalDelete.value = !showModalDelete.value
+}
+
+async function deleteUser() {
+  const { data, status, error } = await useCustomFetch('/api/akun/delete/', { method: 'DELETE', body: { id: selectedUser.value.id } })
+
+  if (data.value === null || status.value === 'success') {
+    toast.add({ icon: 'i-heroicons-check-badge', color: 'primary', title: 'Berhasil menghapus akun!' })
+    refresh()
+    showModalDelete.value = false
+  }
+
+  if (error.value) {
+    toast.add({ icon: 'i-heroicons-x-circle-solid', color: 'red', title: 'Gagal menghapus akun!' })
+    console.error(error.value)
+  }
 }
 </script>
 
@@ -86,7 +95,7 @@ function showDetailUser(row) {
           </svg>
         </div>
 
-        <div class="cursor-pointer" @click="showModalDelete = !showModalDelete">
+        <div class="cursor-pointer" @click="showModalDeleteUser(row)">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10.473 16.6398C10.2747 16.6398 10.0846 16.562 9.94448 16.4235C9.80433 16.2851 9.72559 16.0973 9.72559 15.9015V10.7925C9.72559 10.596 9.8046 10.4076 9.94525 10.2686C10.0859 10.1297 10.2767 10.0516 10.4756 10.0516C10.6745 10.0516 10.8652 10.1297 11.0059 10.2686C11.1465 10.4076 11.2256 10.596 11.2256 10.7925V15.8985C11.2259 15.9962 11.2067 16.0929 11.169 16.1832C11.1313 16.2734 11.0759 16.3554 11.0059 16.4243C10.9359 16.4933 10.8527 16.5478 10.7613 16.5848C10.6698 16.6218 10.5718 16.6405 10.473 16.6398Z" fill="#3A3A3C" fill-opacity="0.4" />
             <path d="M13.473 16.6398C13.2747 16.6398 13.0846 16.562 12.9445 16.4235C12.8043 16.2851 12.7256 16.0973 12.7256 15.9015V10.7925C12.7256 10.596 12.8046 10.4076 12.9453 10.2686C13.0859 10.1297 13.2767 10.0516 13.4756 10.0516C13.6745 10.0516 13.8652 10.1297 14.0059 10.2686C14.1465 10.4076 14.2256 10.596 14.2256 10.7925V15.8985C14.2259 15.9962 14.2067 16.0929 14.169 16.1832C14.1313 16.2734 14.0759 16.3554 14.0059 16.4243C13.9359 16.4933 13.8527 16.5478 13.7613 16.5848C13.6698 16.6218 13.5718 16.6405 13.473 16.6398Z" fill="#3A3A3C" fill-opacity="0.4" />
@@ -97,7 +106,7 @@ function showDetailUser(row) {
     </template>
   </UTable>
   <ManageUsersModalDetailUser :show="modalDetailUser" :user="selectedUser" @close="modalDetailUser = false" />
-  <ManageUsersModalAddUsers :show="modalAddUsers" @close="modalAddUsers = false" />
-  <BaseModalDelete :show="showModalDelete" @close="showModalDelete = false" />
+  <ManageUsersModalAddUsers :show="modalAddUsers" @refresh="refresh" @close="modalAddUsers = false" />
+  <BaseModalDelete :show="showModalDelete" @close="showModalDelete = false" @delete="deleteUser" />
   <ManageUsersModalEditUsers :show="modalEditUsers" @close="modalEditUsers = false" />
 </template>

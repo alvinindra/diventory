@@ -2,7 +2,7 @@
 import type { FormSubmitEvent } from '#ui/types'
 
 const props = defineProps(['show'])
-const emit = defineEmits(['update:show', 'close'])
+const emit = defineEmits(['update:show', 'close', 'refresh'])
 const toast = useToast()
 const showPassword = ref(false)
 
@@ -32,6 +32,7 @@ async function onSubmit(event: FormSubmitEvent<object>) {
       gender: false,
       no_hp: '',
     }
+    emit('refresh')
     emit('close')
   }
 

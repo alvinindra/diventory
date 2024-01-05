@@ -17,7 +17,7 @@ const props = defineProps({
 
 <template>
   <div
-    class="border border-solid max-w-min py-[5px] px-2 rounded-lg text-sm font-medium"
+    class="border border-solid max-w-min py-[5px] px-2 rounded-lg text-sm font-medium capitalize"
     :class="[
       props.color === 'primary' && 'border-diventory-primary-500 text-diventory-primary-500',
       props.color === 'tertiary' && 'border-diventory-tertiary-500 text-diventory-tertiary-500',

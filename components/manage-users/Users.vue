@@ -16,58 +16,77 @@ const columns = [{
   label: 'Action',
 }]
 
-const people = [{
-  id: 1,
-  nama_lengkap: 'fajar',
-  username: 'fajar123',
-  gender: true,
-  email: 'fajar@gmail.com',
-  jabatan: 'marketing',
-}, {
-  id: 2,
-  nama_lengkap: 'maulana',
-  username: 'maulana123',
-  gender: true,
-  email: 'maulana@gmail.com',
-  jabatan: 'marketing',
-}]
+const { data: dataUsers, refresh } = await useCustomFetch('/api/akun/', { method: 'GET' })
 
 const selected = ref([])
+const toast = useToast()
 const q = ref('')
 const filteredRows = computed(() => {
   if (!q.value)
-    return people
+    return dataUsers.value
 
-  return people.filter((person) => {
+  return dataUsers.value.filter((person) => {
     return Object.values(person).some((value) => {
       return String(value).toLowerCase().includes(q.value.toLowerCase())
     })
   })
 })
 
-const selectedFilter = ref(null)
+const selectedUser = ref(null)
+const modalDetailUser = ref(false)
 const modalAddUsers = ref(false)
 const modalEditUsers = ref(false)
 const showModalDelete = ref(false)
+
+function showDetailUser(row) {
+  selectedUser.value = row
+  modalDetailUser.value = !modalDetailUser.value
+}
+
+function showModalDeleteUser(row) {
+  selectedUser.value = row
+  showModalDelete.value = !showModalDelete.value
+}
+
+async function deleteUser() {
+  const { data, status, error } = await useCustomFetch('/api/akun/delete/', { method: 'DELETE', body: { id: selectedUser.value.id } })
+
+  if (data.value === null || status.value === 'success') {
+    toast.add({ icon: 'i-heroicons-check-badge', color: 'primary', title: 'Berhasil menghapus akun!' })
+    refresh()
+    showModalDelete.value = false
+  }
+
+  if (error.value) {
+    toast.add({ icon: 'i-heroicons-x-circle-solid', color: 'red', title: 'Gagal menghapus akun!' })
+    console.error(error.value)
+  }
+}
 </script>
 
 <template>
   <div class="flex px-3 pb-3.5 border-b border-gray-200 dark:border-gray-700">
     <UInput v-model="q" icon="i-heroicons-magnifying-glass-20-solid" placeholder="Search" />
-    <USelect v-model="selectedFilter" class="ms-4 min-w-[150px]" :options="filterGoods" placeholder="Filter" />
     <UButton icon="i-mdi-plus" class="ms-auto" variant="solid" label="Tambah Akun" @click="modalAddUsers = true" />
   </div>
   <UTable v-model="selected" :rows="filteredRows" :columns="columns">
+    <template #nama_lengkap-data="{ row }">
+      <div class="capitalize">
+        {{ row.nama_lengkap }}
+      </div>
+    </template>
     <template #status-data="{ row }">
       <UBadge class="text-diventory-green-500 ring-diventory-green-500" variant="outline">
         {{ row.status }}
       </UBadge>
     </template>
-    <template #action-data>
+    <template #action-data="{ row }">
       <div class="flex gap-3">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12.0001 3C17.3921 3 21.8781 6.88 22.8191 12C21.8791 17.12 17.3921 21 12.0001 21C6.60813 21 2.12213 17.12 1.18213 12C2.12213 6.88 6.60813 3 12.0001 3ZM12.0001 19C14.0398 18.9998 16.0189 18.3071 17.6136 17.0355C19.2083 15.7638 20.324 13.9884 20.7781 12C20.3228 10.0128 19.2066 8.23896 17.6121 6.96854C16.0177 5.69813 14.0393 5.00635 12.0006 5.00635C9.96194 5.00635 7.98359 5.69813 6.38913 6.96854C4.79467 8.23896 3.67849 10.0128 3.22313 12C3.67722 13.9883 4.7928 15.7635 6.38727 17.0352C7.98174 18.3068 9.96066 18.9996 12.0001 19ZM12.0001 16.5C10.8067 16.5 9.66206 16.0259 8.81815 15.182C7.97424 14.3381 7.50013 13.1935 7.50013 12C7.50013 10.8065 7.97424 9.66193 8.81815 8.81802C9.66206 7.97411 10.8067 7.5 12.0001 7.5C13.1936 7.5 14.3382 7.97411 15.1821 8.81802C16.026 9.66193 16.5001 10.8065 16.5001 12C16.5001 13.1935 16.026 14.3381 15.1821 15.182C14.3382 16.0259 13.1936 16.5 12.0001 16.5ZM12.0001 14.5C12.6632 14.5 13.2991 14.2366 13.7679 13.7678C14.2367 13.2989 14.5001 12.663 14.5001 12C14.5001 11.337 14.2367 10.7011 13.7679 10.2322C13.2991 9.76339 12.6632 9.5 12.0001 9.5C11.3371 9.5 10.7012 9.76339 10.2324 10.2322C9.76352 10.7011 9.50013 11.337 9.50013 12C9.50013 12.663 9.76352 13.2989 10.2324 13.7678C10.7012 14.2366 11.3371 14.5 12.0001 14.5Z" fill="#3A3A3C" fill-opacity="0.4" />
-        </svg>
+        <div class="cursor-pointer" @click="showDetailUser(row)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.0001 3C17.3921 3 21.8781 6.88 22.8191 12C21.8791 17.12 17.3921 21 12.0001 21C6.60813 21 2.12213 17.12 1.18213 12C2.12213 6.88 6.60813 3 12.0001 3ZM12.0001 19C14.0398 18.9998 16.0189 18.3071 17.6136 17.0355C19.2083 15.7638 20.324 13.9884 20.7781 12C20.3228 10.0128 19.2066 8.23896 17.6121 6.96854C16.0177 5.69813 14.0393 5.00635 12.0006 5.00635C9.96194 5.00635 7.98359 5.69813 6.38913 6.96854C4.79467 8.23896 3.67849 10.0128 3.22313 12C3.67722 13.9883 4.7928 15.7635 6.38727 17.0352C7.98174 18.3068 9.96066 18.9996 12.0001 19ZM12.0001 16.5C10.8067 16.5 9.66206 16.0259 8.81815 15.182C7.97424 14.3381 7.50013 13.1935 7.50013 12C7.50013 10.8065 7.97424 9.66193 8.81815 8.81802C9.66206 7.97411 10.8067 7.5 12.0001 7.5C13.1936 7.5 14.3382 7.97411 15.1821 8.81802C16.026 9.66193 16.5001 10.8065 16.5001 12C16.5001 13.1935 16.026 14.3381 15.1821 15.182C14.3382 16.0259 13.1936 16.5 12.0001 16.5ZM12.0001 14.5C12.6632 14.5 13.2991 14.2366 13.7679 13.7678C14.2367 13.2989 14.5001 12.663 14.5001 12C14.5001 11.337 14.2367 10.7011 13.7679 10.2322C13.2991 9.76339 12.6632 9.5 12.0001 9.5C11.3371 9.5 10.7012 9.76339 10.2324 10.2322C9.76352 10.7011 9.50013 11.337 9.50013 12C9.50013 12.663 9.76352 13.2989 10.2324 13.7678C10.7012 14.2366 11.3371 14.5 12.0001 14.5Z" fill="#3A3A3C" fill-opacity="0.4" />
+          </svg>
+        </div>
 
         <div class="cursor-pointer" @click="modalEditUsers = true">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -76,7 +95,7 @@ const showModalDelete = ref(false)
           </svg>
         </div>
 
-        <div class="cursor-pointer" @click="showModalDelete = !showModalDelete">
+        <div class="cursor-pointer" @click="showModalDeleteUser(row)">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10.473 16.6398C10.2747 16.6398 10.0846 16.562 9.94448 16.4235C9.80433 16.2851 9.72559 16.0973 9.72559 15.9015V10.7925C9.72559 10.596 9.8046 10.4076 9.94525 10.2686C10.0859 10.1297 10.2767 10.0516 10.4756 10.0516C10.6745 10.0516 10.8652 10.1297 11.0059 10.2686C11.1465 10.4076 11.2256 10.596 11.2256 10.7925V15.8985C11.2259 15.9962 11.2067 16.0929 11.169 16.1832C11.1313 16.2734 11.0759 16.3554 11.0059 16.4243C10.9359 16.4933 10.8527 16.5478 10.7613 16.5848C10.6698 16.6218 10.5718 16.6405 10.473 16.6398Z" fill="#3A3A3C" fill-opacity="0.4" />
             <path d="M13.473 16.6398C13.2747 16.6398 13.0846 16.562 12.9445 16.4235C12.8043 16.2851 12.7256 16.0973 12.7256 15.9015V10.7925C12.7256 10.596 12.8046 10.4076 12.9453 10.2686C13.0859 10.1297 13.2767 10.0516 13.4756 10.0516C13.6745 10.0516 13.8652 10.1297 14.0059 10.2686C14.1465 10.4076 14.2256 10.596 14.2256 10.7925V15.8985C14.2259 15.9962 14.2067 16.0929 14.169 16.1832C14.1313 16.2734 14.0759 16.3554 14.0059 16.4243C13.9359 16.4933 13.8527 16.5478 13.7613 16.5848C13.6698 16.6218 13.5718 16.6405 13.473 16.6398Z" fill="#3A3A3C" fill-opacity="0.4" />
@@ -86,7 +105,8 @@ const showModalDelete = ref(false)
       </div>
     </template>
   </UTable>
-  <ManageUsersModalAddUsers :show="modalAddUsers" @close="modalAddUsers = false" />
-  <BaseModalDelete :show="showModalDelete" @close="showModalDelete = false" />
+  <ManageUsersModalDetailUser :show="modalDetailUser" :user="selectedUser" @close="modalDetailUser = false" />
+  <ManageUsersModalAddUsers :show="modalAddUsers" @refresh="refresh" @close="modalAddUsers = false" />
+  <BaseModalDelete :show="showModalDelete" @close="showModalDelete = false" @delete="deleteUser" />
   <ManageUsersModalEditUsers :show="modalEditUsers" @close="modalEditUsers = false" />
 </template>

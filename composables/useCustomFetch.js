@@ -1,11 +1,11 @@
 import { defu } from 'defu'
 
-export function useCustomFetch (url, options) {
+export function useCustomFetch(url, options) {
   const userAuth = useCookie('token')
   const config = useRuntimeConfig()
 
   const defaults = {
-    baseURL: config.baseUrl ?? 'https://api.nuxt.com',
+    baseURL: config.apiBase ?? 'https://fajar-uas.sirclo.me.dmmy.me',
     key: url,
 
     headers: userAuth.value

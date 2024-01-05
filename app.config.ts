@@ -1,6 +1,9 @@
 export default defineAppConfig({
   ui: {
     primary: 'green',
+    notifications: {
+      position: 'top-0 bottom-auto',
+    },
     card: {
       header: {
         padding: 'px-5 pt-4 pb-0',

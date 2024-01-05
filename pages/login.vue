@@ -1,3 +1,30 @@
+<script setup>
+definePageMeta({
+  middleware: ['auth'],
+})
+
+const router = useRouter()
+const toast = useToast()
+const userAuth = useCookie('token')
+const formLogin = ref({
+  username: '',
+  password: '',
+})
+
+async function login(event) {
+  event.preventDefault()
+  try {
+    const { data } = await useCustomFetch('/api/login/', { method: 'POST', body: formLogin.value })
+    userAuth.value = data.value.access
+    toast.add({ icon: 'i-heroicons-check-badge', color: 'primary', title: 'Login berhasil' })
+    router.push('/')
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+</script>
+
 <template>
   <div class="2xl:container h-screen m-auto">
     <div hidden class="fixed inset-0 w-6/12 lg:block bg-diventory-primary-100">
@@ -19,23 +46,26 @@
           </p>
         </div>
 
-        <form action="" class="space-y-6 pb-6">
+        <form class="space-y-6 pb-6" @submit="login">
           <div>
             <input
-              type="email" placeholder="Alamat Email"
+              v-model="formLogin.username" type="text"
+              placeholder="Alamat Email"
               class="w-full py-3 px-4 ring-1 ring-gray-300 rounded-lg placeholder-gray-600 bg-transparent transition disabled:ring-gray-200 disabled:bg-gray-100 disabled:placeholder-gray-400 invalid:ring-red-400 focus:invalid:outline-none"
             >
           </div>
 
           <div class="flex flex-col items-end">
             <input
-              type="password" placeholder="Password"
+              v-model="formLogin.password" type="password"
+              placeholder="Password"
               class="w-full py-3 px-4 ring-1 ring-gray-300 rounded-lg placeholder-gray-600 bg-transparent transition disabled:ring-gray-200 disabled:bg-gray-100 disabled:placeholder-gray-400 invalid:ring-red-400 focus:invalid:outline-none"
             >
           </div>
 
           <div class="text-center">
             <button
+              type="submit"
               class="w-full px-6 py-3 rounded-lg mb-5 bg-diventory-primary-500 transition hover:bg-diventory-primary-600 focus:bg-diventory-primary-600 active:bg-diventory-primary-800"
             >
               <span class="font-semibold text-white text-base">Login</span>

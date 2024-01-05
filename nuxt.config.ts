@@ -9,4 +9,7 @@ export default defineNuxtConfig({
   },
   modules: ['@nuxt/ui', '@pinia/nuxt'],
   devtools: { enabled: true },
+  runtimeConfig: {
+    apiBase: 'https://fajar-uas.sirclo.me.dmmy.me',
+  },
 })

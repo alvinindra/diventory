@@ -2,7 +2,6 @@
   <aside
     class="absolute left-0 top-0 z-9999 flex h-screen w-[258px] flex-col overflow-y-hidden bg-white duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 border-r-diventory-white-quartenary border"
   >
-    <!-- SIDEBAR HEADER -->
     <div class="flex items-center justify-between gap-2 px-6 py-6 mx-auto">
       <a href="/">
         <img src="/image/logo-diventory.svg" alt="Logo Diventory">
@@ -20,12 +19,9 @@
         </svg>
       </button>
     </div>
-    <!-- SIDEBAR HEADER -->
 
     <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
-      <!-- Sidebar Menu -->
       <nav class="py-4 px-4">
-        <!-- Menu Group -->
         <div>
           <ul class="mb-6 flex flex-col gap-2">
             <!-- <li>
@@ -100,7 +96,6 @@
           </ul>
         </div>
       </nav>
-      <!-- Sidebar Menu -->
     </div>
   </aside>
 </template>

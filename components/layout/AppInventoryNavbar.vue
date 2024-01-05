@@ -54,7 +54,6 @@ async function logout() {
       </div>
 
       <div class="flex items-center gap-3 2xsm:gap-7 ms-auto">
-        <!-- User Area -->
         <div class="relative bg-white rounded-full border border-diventory-black-quartenary ps-3 pe-4 py-2">
           <UDropdown
             :items="items" :ui="{ item: { disabled: 'cursor-text select-text' } }"
@@ -106,9 +105,7 @@ async function logout() {
             </template>
           </UDropdown>
         </div>
-        <!-- Dropdown End -->
       </div>
-      <!-- User Area -->
     </div>
   </header>
 </template>

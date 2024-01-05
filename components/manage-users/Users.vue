@@ -61,6 +61,11 @@ function showDetailUser(row) {
     <UButton icon="i-mdi-plus" class="ms-auto" variant="solid" label="Tambah Akun" @click="modalAddUsers = true" />
   </div>
   <UTable v-model="selected" :rows="filteredRows" :columns="columns">
+    <template #nama_lengkap-data="{ row }">
+      <div class="capitalize">
+        {{ row.nama_lengkap }}
+      </div>
+    </template>
     <template #status-data="{ row }">
       <UBadge class="text-diventory-green-500 ring-diventory-green-500" variant="outline">
         {{ row.status }}

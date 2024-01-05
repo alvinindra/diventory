@@ -35,6 +35,9 @@ const emit = defineEmits(['update:show', 'close'])
           <UFormGroup label="Alamat Email" name="email">
             <UInput :model-value="user?.email" type="email" placeholder="Masukkan alamat email" disabled />
           </UFormGroup>
+          <UFormGroup label="No Hp" name="no_hp">
+            <UInput :model-value="user?.no_hp" type="text" placeholder="Masukkan no handphone" disabled />
+          </UFormGroup>
         </div>
       </div>
     </div>

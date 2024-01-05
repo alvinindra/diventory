@@ -3,20 +3,42 @@ import type { FormSubmitEvent } from '#ui/types'
 
 const props = defineProps(['show'])
 const emit = defineEmits(['update:show', 'close'])
+const toast = useToast()
+const showPassword = ref(false)
 
-const state = reactive({
+let state = reactive({
   nama_lengkap: undefined,
   jabatan: undefined,
   username: undefined,
   email: undefined,
   password: undefined,
+  gender: false,
+  no_hp: '',
 })
 
-const jabatanOptions = ['IT Support', 'Karyawan', 'NPC']
+const jabatanOptions = ['IT Support', 'Karyawan', 'Manajer']
 
 async function onSubmit(event: FormSubmitEvent<object>) {
-  // Do something with data
-  console.log(event.data)
+  event.preventDefault()
+  const { status, error } = await useCustomFetch('/api/akun/', { method: 'POST', body: state })
+  if (status.value === 'success') {
+    toast.add({ icon: 'i-heroicons-check-badge', color: 'primary', title: 'Berhasil membuat akun!' })
+    state = {
+      nama_lengkap: undefined,
+      jabatan: undefined,
+      username: undefined,
+      email: undefined,
+      password: undefined,
+      gender: false,
+      no_hp: '',
+    }
+    emit('close')
+  }
+
+  if (error.value) {
+    toast.add({ icon: 'i-heroicons-x-circle-solid', color: 'red', title: 'Gagal membuat akun!' })
+    console.error(error.value)
+  }
 }
 </script>
 
@@ -43,13 +65,29 @@ async function onSubmit(event: FormSubmitEvent<object>) {
           <UFormGroup label="Alamat Email" name="email">
             <UInput v-model="state.email" type="email" placeholder="Masukkan alamat email" />
           </UFormGroup>
-          <UFormGroup label="Password" name="password">
-            <UInput v-model="state.password" type="password" placeholder="Masukkan password" />
+          <UFormGroup label="No Handphone" name="no_hp">
+            <UInput v-model="state.no_hp" type="text" placeholder="Masukkan no handphone" />
           </UFormGroup>
+          <UFormGroup label="Password" name="password">
+            <UInput v-model="state.password" :type="showPassword ? 'text' : 'password'" placeholder="Masukkan password" :ui="{ icon: { trailing: { pointer: '' } } }">
+              <template #trailing>
+                <UButton
+                  color="gray"
+                  variant="link"
+                  :icon="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
+                  :padded="false"
+                  @click="showPassword = !showPassword"
+                />
+              </template>
+            </UInput>
+          </UFormGroup>
+          <UButton type="submit" class="justify-center w-full text-center hidden">
+            Simpan Data
+          </UButton>
         </UForm>
       </div>
       <div class="flex p-4 border-top border border-solid">
-        <UButton type="submit" class="justify-center w-full text-center">
+        <UButton type="submit" class="justify-center w-full text-center" @click="onSubmit">
           Simpan Data
         </UButton>
       </div>

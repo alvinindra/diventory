@@ -1,47 +1,33 @@
 <script setup>
 const columns = [{
-  key: 'name',
+  key: 'nama_barang',
   label: 'Nama Barang',
 }, {
-  key: 'serialnumber',
+  key: 'serial_number',
   label: 'Serial Number',
 }, {
-  key: 'type',
+  key: 'jenis_barang',
   label: 'Jenis Barang',
 }, {
-  key: 'qrcode',
+  key: 'qr_code',
   label: 'QR Code',
 }, {
-  key: 'status',
+  key: 'status_barang',
   label: 'Status',
 }, {
   key: 'action',
   label: 'Action',
 }]
 
-const people = [{
-  id: 1,
-  name: 'Macbook M1 Space Grey',
-  serialnumber: '44237820XD',
-  type: 'Device',
-  status: 'Tersedia',
-  qrcode: '/image/dummy-qr.svg',
-}, {
-  id: 2,
-  name: 'Macbook M1 Space Grey',
-  serialnumber: '44237820XD',
-  type: 'Device',
-  status: 'Tersedia',
-  qrcode: '/image/dummy-qr.svg',
-}]
+const { data: dataGoods } = await useCustomFetch('/api/barang/', { method: 'GET' })
 
 const selected = ref([])
 const q = ref('')
 const filteredRows = computed(() => {
   if (!q.value)
-    return people
+    return dataGoods.value
 
-  return people.filter((person) => {
+  return dataGoods.value.filter((person) => {
     return Object.values(person).some((value) => {
       return String(value).toLowerCase().includes(q.value.toLowerCase())
     })
@@ -58,10 +44,16 @@ const modalEditGoods = ref(false)
 const showModalDelete = ref(false)
 const showPrintQrCode = ref(false)
 const selectedQrCode = ref(null)
+const selectedGood = ref(null)
 
 function showModalPrintQrCode(qrCode) {
   showPrintQrCode.value = !showPrintQrCode.value
   selectedQrCode.value = qrCode
+}
+
+function showDetailGood(row) {
+  selectedGood.value = row
+  modalDetailGoods.value = !modalDetailGoods.value
 }
 </script>
 
@@ -73,17 +65,17 @@ function showModalPrintQrCode(qrCode) {
     <UButton icon="i-mdi-plus" class="ms-4" variant="solid" label="Tambah Barang" @click="modalAddGoods = true" />
   </div>
   <UTable v-model="selected" :rows="filteredRows" :columns="columns">
-    <template #qrcode-data="{ row }">
-      <img :src="row.qrcode" class="w-[40px] h-[40px] view-box cursor-pointer" alt="" @click="showModalPrintQrCode(row.qrcode)">
+    <template #qr_code-data="{ row }">
+      <img :src="`data:image/jpeg;base64,${row.qr_code}`" class="w-[40px] h-[40px] view-box cursor-pointer" alt="" @click="showModalPrintQrCode(`data:image/jpeg;base64,${row.qr_code}`)">
     </template>
     <template #status-data="{ row }">
       <UBadge class="text-diventory-green-500 ring-diventory-green-500" variant="outline">
-        {{ row.status }}
+        {{ row.status_barang }}
       </UBadge>
     </template>
-    <template #action-data>
+    <template #action-data="{ row }">
       <div class="flex gap-3">
-        <div className="cursor-pointer" @click="modalDetailGoods = !modalDetailGoods">
+        <div className="cursor-pointer" @click="showDetailGood(row)">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12.0001 3C17.3921 3 21.8781 6.88 22.8191 12C21.8791 17.12 17.3921 21 12.0001 21C6.60813 21 2.12213 17.12 1.18213 12C2.12213 6.88 6.60813 3 12.0001 3ZM12.0001 19C14.0398 18.9998 16.0189 18.3071 17.6136 17.0355C19.2083 15.7638 20.324 13.9884 20.7781 12C20.3228 10.0128 19.2066 8.23896 17.6121 6.96854C16.0177 5.69813 14.0393 5.00635 12.0006 5.00635C9.96194 5.00635 7.98359 5.69813 6.38913 6.96854C4.79467 8.23896 3.67849 10.0128 3.22313 12C3.67722 13.9883 4.7928 15.7635 6.38727 17.0352C7.98174 18.3068 9.96066 18.9996 12.0001 19ZM12.0001 16.5C10.8067 16.5 9.66206 16.0259 8.81815 15.182C7.97424 14.3381 7.50013 13.1935 7.50013 12C7.50013 10.8065 7.97424 9.66193 8.81815 8.81802C9.66206 7.97411 10.8067 7.5 12.0001 7.5C13.1936 7.5 14.3382 7.97411 15.1821 8.81802C16.026 9.66193 16.5001 10.8065 16.5001 12C16.5001 13.1935 16.026 14.3381 15.1821 15.182C14.3382 16.0259 13.1936 16.5 12.0001 16.5ZM12.0001 14.5C12.6632 14.5 13.2991 14.2366 13.7679 13.7678C14.2367 13.2989 14.5001 12.663 14.5001 12C14.5001 11.337 14.2367 10.7011 13.7679 10.2322C13.2991 9.76339 12.6632 9.5 12.0001 9.5C11.3371 9.5 10.7012 9.76339 10.2324 10.2322C9.76352 10.7011 9.50013 11.337 9.50013 12C9.50013 12.663 9.76352 13.2989 10.2324 13.7678C10.7012 14.2366 11.3371 14.5 12.0001 14.5Z" fill="#3A3A3C" fill-opacity="0.4" />
           </svg>
@@ -128,7 +120,7 @@ function showModalPrintQrCode(qrCode) {
   </UModal>
   <ManageGoodsModalPrintQrCode :show="showPrintQrCode" :selected-qr-code="selectedQrCode" @close="showPrintQrCode = false" />
   <ManageGoodsModalAddGoods :show="modalAddGoods" @close="modalAddGoods = false" />
-  <ManageGoodsModalDetailGoods :show="modalDetailGoods" @close="modalDetailGoods = false" />
+  <ManageGoodsModalDetailGoods :show="modalDetailGoods" :selected-good="selectedGood" @close="modalDetailGoods = false" />
   <ManageGoodsModalEditGoods :show="modalEditGoods" @close="modalEditGoods = false" />
   <BaseModalDelete :show="showModalDelete" @close="showModalDelete = false" />
 </template>

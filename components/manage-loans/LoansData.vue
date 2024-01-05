@@ -1,13 +1,9 @@
-import type { variants } from '#tailwind-config';
 <script setup>
 const columns = [{
-  key: 'nama_peminjam',
+  key: 'id_akun.nama_lengkap',
   label: 'Nama Peminjaman',
 }, {
-  key: 'jabatan',
-  label: 'Jabatan',
-}, {
-  key: 'nama_barang',
+  key: 'id_barang.nama_barang',
   label: 'Nama Barang',
 }, {
   key: 'tanggal_peminjaman',
@@ -23,33 +19,15 @@ const columns = [{
   label: 'Status',
 }]
 
-const people = [{
-  id: 1,
-  nama_peminjam: 'Jane Doe',
-  jabatan: 'Front-end Developer',
-  nama_barang: 'Macbook M1 Space Grey',
-  tanggal_peminjaman: '2023-12-24',
-  tanggal_pengembalian: '-',
-  durasi_peminjaman: 5,
-  status_peminjaman: 'Dipinjam',
-}, {
-  id: 2,
-  nama_peminjam: 'Jane Doe',
-  jabatan: 'Front-end Developer',
-  nama_barang: 'Macbook M1 Space Grey',
-  tanggal_peminjaman: '2023-12-24',
-  tanggal_pengembalian: '2023-12-31',
-  durasi_peminjaman: 5,
-  status_peminjaman: 'Dikembalikan',
-}]
+const { data: loansData } = await useCustomFetch('/api/peminjaman/', { method: 'GET' })
 
 const selected = ref([])
 const q = ref('')
 const filteredRows = computed(() => {
   if (!q.value)
-    return people
+    return loansData.value
 
-  return people.filter((person) => {
+  return loansData.value.filter((person) => {
     return Object.values(person).some((value) => {
       return String(value).toLowerCase().includes(q.value.toLowerCase())
     })

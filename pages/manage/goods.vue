@@ -8,8 +8,8 @@ useHead({
 
 definePageMeta({
   layout: 'dashboard',
+  middleware: ['auth'],
 })
-
 const listTabs = [
   {
     id: 1,

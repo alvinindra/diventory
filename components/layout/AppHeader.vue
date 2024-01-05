@@ -1,53 +1,52 @@
 <script setup>
-const items = [
-  [{
-    label: 'leo@dicoding.com',
-    slot: 'account',
-    disabled: true,
-  }],
-  [{
-    label: 'Settings',
-    icon: 'i-heroicons-cog-8-tooth',
-  }],
-  [{
-    label: 'Sign out',
-    icon: 'i-heroicons-arrow-left-on-rectangle',
-  }],
-]
+const account = ref(null)
+const userAuth = useCookie('token')
+const router = useRouter()
+const toast = useToast()
+
+async function getAccount() {
+  try {
+    const { data } = await useCustomFetch('/api/akun/', { method: 'GET' })
+    account.value = data.value[0]
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+
+getAccount()
+
+const items = computed(() => {
+  return [
+    [{
+      label: account.value?.email,
+      slot: 'account',
+      disabled: true,
+    }],
+    [{
+      label: 'Sign out',
+      slot: 'logout',
+      icon: 'i-heroicons-arrow-left-on-rectangle',
+    }],
+  ]
+})
+
+async function logout() {
+  try {
+    await useCustomFetch('/api/logout/', { method: 'POST' })
+    userAuth.value = null
+    toast.add({ icon: 'i-heroicons-check-badge', color: 'primary', title: 'Logout berhasil' })
+    router.push('/login')
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
 </script>
 
 <template>
   <header class="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
     <div class="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11">
-      <div class="flex items-center gap-2 sm:gap-4 lg:hidden">
-        <!-- Hamburger Toggle BTN
-        <button
-          class="z-99999 block rounded-sm border border-stroke bg-white p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden"
-          @click.stop="sidebarToggle = !sidebarToggle">
-          <span class="relative block h-5.5 w-5.5 cursor-pointer">
-            <span class="du-block absolute right-0 h-full w-full">
-              <span
-                class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-[0] duration-200 ease-in-out dark:bg-white"
-                :class="{ '!w-full delay-300': !sidebarToggle }" />
-              <span
-                class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-150 duration-200 ease-in-out dark:bg-white"
-                :class="{ '!w-full delay-400': !sidebarToggle }" />
-              <span
-                class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-200 duration-200 ease-in-out dark:bg-white"
-                :class="{ '!w-full delay-500': !sidebarToggle }" />
-            </span>
-            <span class="du-block absolute right-0 h-full w-full rotate-45">
-              <span
-                class="absolute left-2.5 top-0 block h-full w-0.5 rounded-sm bg-black delay-300 duration-200 ease-in-out dark:bg-white"
-                :class="{ '!h-0 delay-[0]': !sidebarToggle }" />
-              <span
-                class="delay-400 absolute left-0 top-2.5 block h-0.5 w-full rounded-sm bg-black duration-200 ease-in-out dark:bg-white"
-                :class="{ '!h-0 dealy-200': !sidebarToggle }" />
-            </span>
-          </span>
-        </button> -->
-      </div>
-
       <div class="flex items-center gap-3 2xsm:gap-7 ms-auto">
         <!-- User Area -->
         <div class="relative">
@@ -56,9 +55,9 @@ const items = [
             :popper="{ placement: 'bottom-start' }"
           >
             <div class="flex">
-              <UAvatar class="my-auto" src="https://avatars.githubusercontent.com/u/739984?v=4" />
-              <div class="my-auto w-[100px] mx-2">
-                <strong class="mb-0.5 line-clamp-1">Katie Pena</strong>
+              <UAvatar class="my-auto" src="https://api.iconify.design/heroicons:user-circle-16-solid.svg" />
+              <div class="my-auto w-[120px] mx-2">
+                <strong class="mb-0.5 line-clamp-1 capitalize">{{ account?.nama_lengkap }}</strong>
                 <div class="text-xs text-diventory-black-secondary">
                   Admin
                 </div>
@@ -88,6 +87,16 @@ const items = [
               <span class="truncate">{{ item.label }}</span>
 
               <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 ms-auto" />
+            </template>
+
+            <template #logout="{ item }">
+              <div class="flex w-full" @click="logout">
+                <div class="truncate me-auto">
+                  {{ item.label }}
+                </div>
+
+                <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 ms-auto my-auto" />
+              </div>
             </template>
           </UDropdown>
         </div>

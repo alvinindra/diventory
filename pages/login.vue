@@ -13,14 +13,19 @@ const formLogin = ref({
 
 async function login(event) {
   event.preventDefault()
-  try {
-    const { data } = await useCustomFetch('/api/login/', { method: 'POST', body: formLogin.value })
+
+  const { data, error, status } = await useCustomFetch('/api/login/', { method: 'POST', body: formLogin.value })
+
+  if (status.value === 'success') {
     userAuth.value = data.value.access
+    localStorage.setItem('userData', JSON.stringify(data.value.user_data))
     toast.add({ icon: 'i-heroicons-check-badge', color: 'primary', title: 'Login berhasil' })
     router.push('/')
   }
-  catch (error) {
-    console.error(error)
+
+  if (error.value) {
+    toast.add({ icon: 'i-heroicons-x-circle-solid', color: 'red', title: `Username atau password salah!` })
+    console.error(error.value)
   }
 }
 </script>

@@ -12,7 +12,7 @@ const state = reactive({
   password: undefined,
 })
 
-const jabatanOptions = ['IT Support', 'Karyawan', 'Manajer']
+const jabatanOptions = ['it_support', 'karyawan', 'admin']
 
 async function onSubmit(event: FormSubmitEvent<object>) {
   // Do something with data

@@ -12,6 +12,14 @@ const props = defineProps({
     default: 'Anda akan menghapus data ini, yakin?',
     type: String,
   },
+  labelApprove: {
+    default: 'Ya, Hapus',
+    type: String,
+  },
+  labelReject: {
+    default: 'Tidak',
+    type: String,
+  },
 })
 const emit = defineEmits(['update:show', 'close', 'delete'])
 </script>
@@ -30,8 +38,8 @@ const emit = defineEmits(['update:show', 'close', 'delete'])
         {{ props.caption }}
       </div>
       <div class="grid grid-cols-2 gap-3">
-        <UButton type="button" class="text-center align-middle justify-center" variant="outline" label="Tidak" @click="emit('close')" />
-        <UButton type="button" class="text-center align-middle justify-center" label="Ya, Tolak" @click="emit('delete')" />
+        <UButton type="button" class="text-center align-middle justify-center" variant="outline" :label="props.labelReject" @click="emit('close')" />
+        <UButton type="button" class="text-center align-middle justify-center" :label="props.labelApprove" @click="emit('delete')" />
       </div>
     </div>
   </UModal>

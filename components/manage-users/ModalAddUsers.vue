@@ -16,7 +16,7 @@ let state = reactive({
   no_hp: '',
 })
 
-const jabatanOptions = ['IT Support', 'Karyawan', 'Manajer']
+const jabatanOptions = ['it_support', 'karyawan', 'admin']
 
 async function onSubmit(event: FormSubmitEvent<object>) {
   event.preventDefault()

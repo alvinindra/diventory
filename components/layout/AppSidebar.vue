@@ -1,3 +1,13 @@
+<script setup>
+const account = ref(null)
+
+async function getAccount() {
+  account.value = JSON.parse(window.localStorage.getItem('userData'))
+}
+
+getAccount()
+</script>
+
 <template>
   <aside
     class="absolute left-0 top-0 z-9999 flex h-screen w-[258px] flex-col overflow-y-hidden bg-white duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 border-r-diventory-white-quartenary border"
@@ -71,7 +81,7 @@
                 Kelola Pinjaman
               </NuxtLink>
             </li>
-            <li>
+            <li v-if="account?.jabatan === 'admin'">
               <NuxtLink
                 class="group relative flex items-center gap-3  py-3 px-4 font-medium text-diventory-black-secondary duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
                 to="/manage/users"

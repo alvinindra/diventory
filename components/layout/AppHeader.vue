@@ -5,7 +5,8 @@ const router = useRouter()
 const toast = useToast()
 
 async function getAccount() {
-  account.value = JSON.parse(window.localStorage.getItem('userData'))
+  if (process.client)
+    account.value = JSON.parse(window.localStorage.getItem('userData'))
 }
 
 getAccount()
@@ -30,7 +31,7 @@ async function logout() {
   try {
     await useCustomFetch('/api/logout/', { method: 'POST' })
     userAuth.value = null
-    localStorage.removeItem('userData')
+    window.localStorage.removeItem('userData')
     toast.add({ icon: 'i-heroicons-check-badge', color: 'primary', title: 'Logout berhasil' })
     router.push('/login')
   }

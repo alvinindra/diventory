@@ -18,7 +18,7 @@ async function login(event) {
 
   if (status.value === 'success') {
     userAuth.value = data.value.access
-    localStorage.setItem('userData', JSON.stringify(data.value.user_data))
+    window.localStorage.setItem('userData', JSON.stringify(data.value.user_data))
     toast.add({ icon: 'i-heroicons-check-badge', color: 'primary', title: 'Login berhasil' })
     router.push('/')
   }

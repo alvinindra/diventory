@@ -7,7 +7,11 @@ useHead({
   title: 'Peminjaman Barang',
 })
 
+const { data: dataGoods } = await useCustomFetch('/api/barang/', { method: 'GET' })
+
 const borrowSuccess = ref(false)
+const selectedGood = ref(null)
+const selectedDuration = ref(null)
 </script>
 
 <template>
@@ -36,18 +40,21 @@ const borrowSuccess = ref(false)
               <div class="text-diventory-black-secondary text-base">
                 Pilih barang yang akan dipinjam
               </div>
+              <div>{{ `${new Date().getUTCFullYear()}-${new Date().getUTCMonth('2')}-${new Date().getUTCDate()}` }}</div>
             </div>
             <img class="w-[150px] h-[150px]" src="/image/illustration-peminjaman-barang.svg" alt="Peminjaman Barang">
           </div>
-          <UForm class="space-y-4">
+          <form class="space-y-4">
             <UFormGroup label="Nama Barang" name="name">
               <USelectMenu
+                v-model="selectedGood"
                 searchable
                 searchable-placeholder="Cari nama barang yang akan dipinjam"
                 select-class="w-full px-[14px] py-[10px] mt-2"
                 placeholder="Cari nama barang yang akan dipinjam"
-                :options="['Wade Cooper', 'Arlene Mccoy', 'Devon Webb', 'Tom Cook', 'Tanya Fox', 'Hellen Schmidt', 'Caroline Schultz', 'Mason Heaney', 'Claudie Smitham', 'Emil Schaefer']"
-                model-value=""
+                :options="dataGoods"
+                value-attribute="nama_barang"
+                option-attribute="nama_barang"
               >
                 <template #trailing>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,16 +65,16 @@ const borrowSuccess = ref(false)
             </UFormGroup>
             <UFormGroup label="Durasi Peminjaman" name="duration">
               <USelectMenu
+                v-model="selectedDuration"
                 select-class="w-full px-[14px] py-[10px] mt-2"
                 placeholder="Pilih durasi peminjaman"
                 :options="['Wade Cooper', 'Arlene Mccoy', 'Devon Webb', 'Tom Cook', 'Tanya Fox', 'Hellen Schmidt', 'Caroline Schultz', 'Mason Heaney', 'Claudie Smitham', 'Emil Schaefer']"
-                model-value=""
               />
             </UFormGroup>
-          </UForm>
-          <UButton type="button" class="bg-diventory-primary-600 hover:bg-diventory-primary-500 py-2 justify-center w-full text-center" @click="borrowSuccess = !borrowSuccess">
-            Submit
-          </UButton>
+            <UButton type="button" class="bg-diventory-primary-600 hover:bg-diventory-primary-500 py-2 justify-center w-full text-center" @click="borrowSuccess = !borrowSuccess">
+              Submit
+            </UButton>
+          </form>
         </div>
       </div>
     </main>

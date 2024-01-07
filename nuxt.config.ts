@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     safelistColors: ['success'],
     icons: ['mdi', 'simple-icons'],
   },
-  modules: ['@nuxt/ui', '@pinia/nuxt'],
+  modules: ['@nuxt/ui', '@pinia/nuxt', '@vueuse/nuxt'],
   devtools: { enabled: true },
   runtimeConfig: {
     apiBase: 'https://fajar-uas.sirclo.me.dmmy.me',

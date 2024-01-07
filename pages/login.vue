@@ -56,7 +56,8 @@ async function login(event) {
             <input
               v-model="formLogin.username" type="text"
               placeholder="Alamat Email"
-              class="w-full py-3 px-4 ring-1 ring-gray-300 rounded-lg placeholder-gray-600 bg-transparent transition disabled:ring-gray-200 disabled:bg-gray-100 disabled:placeholder-gray-400 invalid:ring-red-400 focus:invalid:outline-none"
+              class="w-full py-3 px-4 ring-1 ring-gray-300 rounded-lg placeholder-gray-600 bg-transparent transition disabled:ring-gray-200 disabled:bg-gray-100 disabled:placeholder-gray-400"
+              required
             >
           </div>
 
@@ -64,7 +65,8 @@ async function login(event) {
             <input
               v-model="formLogin.password" type="password"
               placeholder="Password"
-              class="w-full py-3 px-4 ring-1 ring-gray-300 rounded-lg placeholder-gray-600 bg-transparent transition disabled:ring-gray-200 disabled:bg-gray-100 disabled:placeholder-gray-400 invalid:ring-red-400 focus:invalid:outline-none"
+              class="w-full py-3 px-4 ring-1 ring-gray-300 rounded-lg placeholder-gray-600 bg-transparent transition disabled:ring-gray-200 disabled:bg-gray-100 disabled:placeholder-gray-400"
+              require
             >
           </div>
 

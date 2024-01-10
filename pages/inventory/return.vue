@@ -30,6 +30,13 @@ const returnSuccess = ref(false)
         <div class="p-[20px] flex flex-col shadow max-w[340px] rounded-xl gap-5 bg-white">
           <div class="flex flex-row gap-2">
             <div class="flex flex-col gap-2 my-auto">
+              <button class="mb-8 max-w-min" @click="$router.push('/inventory')">
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0.5" y="0.5" width="35" height="35" rx="17.5" fill="#FDFDFE" />
+                  <rect x="0.5" y="0.5" width="35" height="35" rx="17.5" stroke="#E5E5EA" />
+                  <path d="M12.167 18L17.167 13M12.167 18L17.167 23M12.167 18H23.8337" stroke="#1F4E91" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
               <div class="font-medium text-xl">
                 Form Pengembalian Barang
               </div>

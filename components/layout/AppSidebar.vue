@@ -2,7 +2,8 @@
 const account = ref(null)
 
 async function getAccount() {
-  account.value = JSON.parse(window.localStorage.getItem('userData'))
+  if (process.client)
+    account.value = JSON.parse(window.localStorage.getItem('userData'))
 }
 
 getAccount()
@@ -81,28 +82,30 @@ getAccount()
                 Kelola Pinjaman
               </NuxtLink>
             </li>
-            <li v-if="account?.jabatan === 'admin'">
-              <NuxtLink
-                class="group relative flex items-center gap-3  py-3 px-4 font-medium text-diventory-black-secondary duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-                to="/manage/users"
-                active-class="text-diventory-primary-600 bg-diventory-primary-100 rounded-[12px]"
-              >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M9.99992 10.8333C12.3011 10.8333 14.1666 8.96785 14.1666 6.66667C14.1666 4.36548 12.3011 2.5 9.99992 2.5C7.69873 2.5 5.83325 4.36548 5.83325 6.66667C5.83325 8.96785 7.69873 10.8333 9.99992 10.8333Z"
-                    stroke="currentColor" stroke-opacity="0.6" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M16.6666 17.5002C16.6666 15.7321 15.9642 14.0364 14.714 12.7861C13.4637 11.5359 11.768 10.8335 9.99992 10.8335C8.23181 10.8335 6.53612 11.5359 5.28587 12.7861C4.03563 14.0364 3.33325 15.7321 3.33325 17.5002"
-                    stroke="currentColor" stroke-opacity="0.6" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+            <ClientOnly>
+              <li v-if="account?.jabatan === 'admin'">
+                <NuxtLink
+                  class="group relative flex items-center gap-3  py-3 px-4 font-medium text-diventory-black-secondary duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+                  to="/manage/users"
+                  active-class="text-diventory-primary-600 bg-diventory-primary-100 rounded-[12px]"
+                >
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.99992 10.8333C12.3011 10.8333 14.1666 8.96785 14.1666 6.66667C14.1666 4.36548 12.3011 2.5 9.99992 2.5C7.69873 2.5 5.83325 4.36548 5.83325 6.66667C5.83325 8.96785 7.69873 10.8333 9.99992 10.8333Z"
+                      stroke="currentColor" stroke-opacity="0.6" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M16.6666 17.5002C16.6666 15.7321 15.9642 14.0364 14.714 12.7861C13.4637 11.5359 11.768 10.8335 9.99992 10.8335C8.23181 10.8335 6.53612 11.5359 5.28587 12.7861C4.03563 14.0364 3.33325 15.7321 3.33325 17.5002"
+                      stroke="currentColor" stroke-opacity="0.6" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
 
-                Kelola Akun
-              </NuxtLink>
-            </li>
+                  Kelola Akun
+                </NuxtLink>
+              </li>
+            </ClientOnly>
           </ul>
         </div>
       </nav>

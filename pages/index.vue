@@ -3,7 +3,7 @@ definePageMeta({
   layout: 'dashboard',
 })
 
-const userData = JSON.parse(window.localStorage.getItem('userData'))
+const userData = process.client && JSON.parse(window.localStorage.getItem('userData'))
 
 async function getRedirected() {
   if (userData.jabatan === 'karyawan')

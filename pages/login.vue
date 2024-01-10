@@ -6,6 +6,7 @@ definePageMeta({
 const router = useRouter()
 const toast = useToast()
 const userAuth = useCookie('token')
+const showPassword = ref(false)
 const formLogin = ref({
   username: '',
   password: '',
@@ -53,21 +54,27 @@ async function login(event) {
 
         <form class="space-y-6 pb-6" @submit="login">
           <div>
-            <input
+            <UInput
               v-model="formLogin.username" type="text"
-              placeholder="Alamat Email"
-              class="w-full py-3 px-4 ring-1 ring-gray-300 rounded-lg placeholder-gray-600 bg-transparent transition disabled:ring-gray-200 disabled:bg-gray-100 disabled:placeholder-gray-400"
+              placeholder="Username"
+              input-class="py-3 px-4"
+              class="w-full ring-gray-300 rounded-lg placeholder-gray-600 bg-transparent transition disabled:ring-gray-200 disabled:bg-gray-100 disabled:placeholder-gray-400"
               required
-            >
+            />
           </div>
 
           <div class="flex flex-col items-end">
-            <input
-              v-model="formLogin.password" type="password"
-              placeholder="Password"
-              class="w-full py-3 px-4 ring-1 ring-gray-300 rounded-lg placeholder-gray-600 bg-transparent transition disabled:ring-gray-200 disabled:bg-gray-100 disabled:placeholder-gray-400"
-              require
-            >
+            <UInput v-model="formLogin.password" input-class="px-4 py-3" class="w-full ring-gray-300 rounded-lg placeholder-gray-600 bg-transparent transition disabled:ring-gray-200 disabled:bg-gray-100 disabled:placeholder-gray-400" :type="showPassword ? 'text' : 'password'" placeholder="Masukkan password" :ui="{ icon: { trailing: { pointer: '' } } }" required="">
+              <template #trailing>
+                <UButton
+                  color="gray"
+                  variant="link"
+                  :icon="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
+                  :padded="false"
+                  @click="showPassword = !showPassword"
+                />
+              </template>
+            </UInput>
           </div>
 
           <div class="text-center">

@@ -69,10 +69,8 @@ function showDetailGood(row) {
       <template #qr_code-data="{ row }">
         <img :src="`data:image/jpeg;base64,${row.qr_code}`" class="w-[40px] h-[40px] view-box cursor-pointer" alt="" @click="showModalPrintQrCode(`data:image/jpeg;base64,${row.qr_code}`)">
       </template>
-      <template #status-data="{ row }">
-        <UBadge class="text-diventory-green-500 ring-diventory-green-500" variant="outline">
-          {{ row.status_barang }}
-        </UBadge>
+      <template #status_barang-data="{ row }">
+        <BaseBadge :title="row?.status_barang" />
       </template>
       <template #action-data="{ row }">
         <div class="flex gap-3">

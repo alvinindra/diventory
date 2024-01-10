@@ -12,10 +12,8 @@ definePageMeta({
 <template>
   <div>
     <BaseTitle title="Kelola Akun" />
-    <ClientOnly>
-      <UCard class="mt-5">
-        <ManageUsers />
-      </UCard>
-    </ClientOnly>
+    <UCard class="mt-5">
+      <ManageUsers />
+    </UCard>
   </div>
 </template>

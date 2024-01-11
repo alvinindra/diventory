@@ -18,7 +18,6 @@ const columns = [{
 
 const { data: dataUsers, refresh } = await useCustomFetch('/api/akun/', { method: 'GET' })
 
-const selected = ref([])
 const toast = useToast()
 const q = ref('')
 const filteredRows = computed(() => {
@@ -75,7 +74,7 @@ async function deleteUser() {
     <UButton icon="i-mdi-plus" class="ms-auto" variant="solid" label="Tambah Akun" @click="modalAddUsers = true" />
   </div>
   <ClientOnly>
-    <UTable v-model="selected" :rows="filteredRows" :columns="columns">
+    <UTable :rows="filteredRows" :columns="columns">
       <template #nama_lengkap-data="{ row }">
         <div class="capitalize">
           {{ row.nama_lengkap }}

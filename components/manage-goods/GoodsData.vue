@@ -21,7 +21,6 @@ const columns = [{
 
 const { data: dataGoods } = await useCustomFetch('/api/barang/', { method: 'GET' })
 
-const selected = ref([])
 const q = ref('')
 const filteredRows = computed(() => {
   if (!q.value)
@@ -65,7 +64,7 @@ function showDetailGood(row) {
     <UButton icon="i-mdi-plus" class="ms-4" variant="solid" label="Tambah Barang" @click="modalAddGoods = true" />
   </div>
   <ClientOnly>
-    <UTable v-model="selected" :rows="filteredRows" :columns="columns">
+    <UTable :rows="filteredRows" :columns="columns">
       <template #qr_code-data="{ row }">
         <img :src="`data:image/jpeg;base64,${row.qr_code}`" class="w-[40px] h-[40px] view-box cursor-pointer" alt="" @click="showModalPrintQrCode(`data:image/jpeg;base64,${row.qr_code}`)">
       </template>

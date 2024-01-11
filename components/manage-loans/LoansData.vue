@@ -21,7 +21,6 @@ const columns = [{
 
 const { data: loansData } = await useCustomFetch('/api/peminjaman/', { method: 'GET' })
 
-const selected = ref([])
 const q = ref('')
 const filteredRows = computed(() => {
   if (!q.value)
@@ -64,7 +63,7 @@ const showModalAccept = ref(false)
     <USelect v-model="selectedFilter" class="ms-4 min-w-[150px]" :options="filterGoods" placeholder="Filter" />
     <UButton icon="i-mdi-line-scan" class="ms-auto bg-diventory-primary-100 text-diventory-primary-600 hover:bg-diventory-primary-200" variant="solid" label="Scan Barang" @click="isQrCodeActive = !isQrCodeActive" />
   </div>
-  <UTable v-model="selected" :rows="filteredRows" :columns="columns">
+  <UTable :rows="filteredRows" :columns="columns">
     <template #durasi_peminjaman-data="{ row }">
       {{ row.durasi_peminjaman }} Tahun
     </template>

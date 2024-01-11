@@ -15,6 +15,7 @@ const selectedGood = ref(null)
 const selectedDuration = ref(null)
 
 const label = computed(() => selectedDuration.value?.toLocaleDateString('ID-id', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }))
+const filteredDataGoods = computed(() => dataGoods.value.filter(good => good.status_barang === 'Tersedia'))
 
 function formatDate(date) {
   const d = new Date(date)
@@ -32,11 +33,10 @@ function formatDate(date) {
 
 async function createLoan() {
   const { status, error } = await useCustomFetch('/api/peminjaman/create', { method: 'POST', body: {
-    tanggal_peminjaman: formatDate(selectedDuration.value),
-    tanggal_pengembalian: formatDate(selectedDuration.value + 5 * 86400000),
+    tanggal_peminjaman: formatDate(new Date(Date.now())),
+    tanggal_pengembalian: formatDate(selectedDuration.value),
     id_akun: userData.id,
     id_barang: selectedGood.value.id,
-    durasi_peminjaman: formatDate(selectedDuration.value),
   } })
 
   if (status.value === 'success')
@@ -46,6 +46,36 @@ async function createLoan() {
     console.error(error.value)
     toast.add({ icon: 'i-heroicons-x-circle-solid', color: 'red', title: 'Gagal meminjam barang!' })
   }
+}
+
+function calculateDaysDifference(selectedDate) {
+  const currentDate = new Date()
+
+  const selectedDateObject = new Date(selectedDate)
+
+  const timeDifference = selectedDateObject - currentDate
+
+  const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
+  return daysDifference
+}
+
+function convertDayToDuration(number) {
+  const years = Math.floor(number / 365)
+  const months = Math.floor((number % 365) / 30)
+  const days = number % 30
+
+  let result = ''
+
+  if (years > 0)
+    result += `${years} Tahun `
+
+  if (months > 0)
+    result += `${months} Bulan `
+
+  if (days > 0)
+    result += `${days} Hari`
+
+  return result ? result.trim() : '-'
 }
 </script>
 
@@ -94,11 +124,11 @@ async function createLoan() {
                   searchable-placeholder="Cari nama barang yang akan dipinjam"
                   select-class="w-full px-[14px] py-[10px] mt-2"
                   placeholder="Cari nama barang yang akan dipinjam"
-                  :options="dataGoods"
+                  :options="filteredDataGoods"
                   option-attribute="nama_barang"
                 >
                   <template #label>
-                    <span v-if="selectedGood" class="truncate">{{ selectedGood?.nama_barang }}</span>
+                    <span v-if="selectedGood" class="truncate">{{ selectedGood?.nama_barang }} - SN: {{ selectedGood?.serial_number }}</span>
                     <span v-else>Cari nama barang yang akan dipinjam</span>
                   </template>
                   <template #trailing>
@@ -117,7 +147,7 @@ async function createLoan() {
                   focus:outline-none border-0 rounded-md font-normal text-left cursor-default
                    text-sm shadow-sm bg-white text-gray-900
                     ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 inline-flex items-center w-full px-[14px] py-[10px] mt-2"
-                    variant="outline" color="gray" :label="label ? label : 'Pilih durasi peminjaman'"
+                    variant="outline" color="gray" :label="label ? `${label} - ${convertDayToDuration(calculateDaysDifference(selectedDuration))}` : 'Pilih durasi peminjaman'"
                   />
 
                   <template #panel="{ close }">

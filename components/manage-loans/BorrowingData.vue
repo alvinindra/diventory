@@ -59,6 +59,26 @@ function colorStatusPeminjaman(row) {
   }
   return color
 }
+
+function convertDayToDuration(number) {
+  const years = Math.floor(number / 365)
+  const months = Math.floor((number % 365) / 30)
+  const days = number % 30
+
+  let result = ''
+
+  if (years > 0)
+    result += `${years} Tahun `
+
+  if (months > 0)
+    result += `${months} Bulan `
+
+  if (days > 0)
+    result += `${days} Hari`
+
+  return result ? result.trim() : '-'
+}
+
 const isQrCodeActive = ref(false)
 const showModalReject = ref(false)
 const showModalAccept = ref(false)
@@ -72,7 +92,7 @@ const showModalAccept = ref(false)
   </div>
   <UTable :rows="filteredRows" :columns="columns">
     <template #durasi_peminjaman-data="{ row }">
-      {{ row.durasi_peminjaman }} Tahun
+      {{ convertDayToDuration(row.durasi_peminjaman) }}
     </template>
     <template #status_peminjaman-data="{ row }">
       <BaseBadge

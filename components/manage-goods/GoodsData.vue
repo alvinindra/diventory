@@ -22,18 +22,7 @@ const columns = [{
 const { data: dataGoods, refresh } = await useCustomFetch('/api/barang/', { method: 'GET' })
 
 const q = ref('')
-const filteredRows = computed(() => {
-  if (!q.value)
-    return dataGoods.value
-
-  return dataGoods.value.filter((person) => {
-    return Object.values(person).some((value) => {
-      return String(value).toLowerCase().includes(q.value.toLowerCase())
-    })
-  })
-})
-
-const filterGoods = ['Tersedia', 'Dipinjam', 'Rusak']
+const toast = useToast()
 
 const selectedFilter = ref(null)
 const isQrCodeActive = ref(false)
@@ -44,6 +33,50 @@ const showModalDelete = ref(false)
 const showPrintQrCode = ref(false)
 const selectedQrCode = ref(null)
 const selectedGood = ref(null)
+
+const filterGoods = ['Semua', 'Tersedia', 'Dipinjam', 'Rusak', 'Dikembalikan']
+
+const filteredRows = computed(() => {
+  if (selectedFilter.value) {
+    if (selectedFilter.value === 'Semua')
+      return dataGoods.value
+
+    return dataGoods.value.filter((person) => {
+      return person.status_barang === selectedFilter.value
+    })
+  }
+
+  if (!q.value)
+    return dataGoods.value
+
+  return dataGoods.value.filter((person) => {
+    return Object.values(person).some((value) => {
+      return String(value).toLowerCase().includes(q.value.toLowerCase())
+    })
+  })
+})
+
+function colorStatusGood(status) {
+  let color = ''
+  switch (status) {
+    case 'Dipinjam':
+      color = 'primary'
+      break
+    case 'Dikembalikan':
+      color = 'tertiary'
+      break
+    case 'Rusak':
+      color = 'danger'
+      break
+    case 'Tersedia':
+      color = 'success'
+      break
+    default:
+      color = 'primary'
+      break
+  }
+  return color
+}
 
 function showModalPrintQrCode(qrCode) {
   showPrintQrCode.value = !showPrintQrCode.value
@@ -61,13 +94,17 @@ function showModalDeleteGood(row) {
 }
 
 async function deleteGood() {
-  const { data, status, error } = await useCustomFetch('/api/barang/delete/', { method: 'DELETE', body: { id: selectedGood.value.id } })
-
-  if (data.value === null || status.value === 'success') {
-    toast.add({ icon: 'i-heroicons-check-badge', color: 'primary', title: 'Berhasil menghapus barang!' })
-    refresh()
-    showModalDelete.value = false
-  }
+  const { error } = await useCustomFetch('/api/barang/delete/', {
+    method: 'DELETE',
+    body: { id: selectedGood.value.id },
+    onResponse({ _request, response, _options }) {
+      if (response.status === 204) {
+        toast.add({ icon: 'i-heroicons-check-badge', color: 'primary', title: 'Berhasil menghapus barang!' })
+        refresh()
+        showModalDelete.value = false
+      }
+    },
+  })
 
   if (error.value) {
     toast.add({ icon: 'i-heroicons-x-circle-solid', color: 'red', title: 'Gagal menghapus barang!' })
@@ -89,7 +126,7 @@ async function deleteGood() {
         <img :src="`data:image/jpeg;base64,${row.qr_code}`" class="w-[40px] h-[40px] view-box cursor-pointer" alt="" @click="showModalPrintQrCode(`data:image/jpeg;base64,${row.qr_code}`)">
       </template>
       <template #status_barang-data="{ row }">
-        <BaseBadge :title="row?.status_barang" />
+        <BaseBadge :title="row?.status_barang" :color="colorStatusGood(row?.status_barang)" />
       </template>
       <template #action-data="{ row }">
         <div class="flex gap-3">
@@ -138,7 +175,7 @@ async function deleteGood() {
     </div>
   </UModal>
   <ManageGoodsModalPrintQrCode :show="showPrintQrCode" :selected-qr-code="selectedQrCode" @close="showPrintQrCode = false" />
-  <ManageGoodsModalAddGoods :show="modalAddGoods" @close="modalAddGoods = false" />
+  <LazyManageGoodsModalAddGoods :show="modalAddGoods" @close="modalAddGoods = false" @refresh="refresh" />
   <ManageGoodsModalDetailGoods :show="modalDetailGoods" :selected-good="selectedGood" @close="modalDetailGoods = false" />
   <ManageGoodsModalEditGoods :show="modalEditGoods" @close="modalEditGoods = false" />
   <BaseModalDelete :show="showModalDelete" @close="showModalDelete = false" @delete="deleteGood" />

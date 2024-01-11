@@ -49,7 +49,7 @@ async function onSubmit(event: FormSubmitEvent<object>) {
                 <div>Generate Kode QR</div>
               </UButton>
               <div class="my-auto ms-auto">
-                <img src="/image/dummy-qr.svg" alt="">
+                <img src="/image/dummy-qr.svg" class="w-[64px] h-[64]" alt="">
               </div>
             </div>
           </UFormGroup>

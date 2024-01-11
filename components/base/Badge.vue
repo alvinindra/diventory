@@ -21,6 +21,8 @@ const props = defineProps({
     :class="[
       props.color === 'primary' && 'border-diventory-primary-500 text-diventory-primary-500',
       props.color === 'tertiary' && 'border-diventory-tertiary-500 text-diventory-tertiary-500',
+      props.color === 'danger' && 'border-diventory-red-500 text-diventory-red-500',
+      props.color === 'success' && 'border-diventory-green-500 text-diventory-green-500',
     ]"
   >
     {{ props.title }}

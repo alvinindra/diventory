@@ -1,6 +1,9 @@
 <script setup>
+import print from 'vue3-print-nb'
+
 const props = defineProps(['show', 'selectedQrCode'])
 const emit = defineEmits(['update:show', 'close'])
+const vPrint = print
 </script>
 
 <template>
@@ -13,10 +16,10 @@ const emit = defineEmits(['update:show', 'close'])
         <UIcon name="i-heroicons-x-mark" class="w-6 h-6 ms-auto my-auto cursor-pointer" @click="emit('close')" />
       </div>
       <div class="p-4 mx-auto flex">
-        <img class="max-w-[350px] max-h-[350px] w-full mx-auto" :src="selectedQrCode" alt="">
+        <img id="printQrCode" class="max-w-[350px] max-h-[350px] w-full mx-auto print:max-w-[150px] print:max-h-[150px]" :src="selectedQrCode" alt="">
       </div>
       <div class="p-4 border border-top border-solid">
-        <UButton type="button" class="text-center align-middle justify-center w-full" label="Print QR Code" />
+        <UButton v-print="'#printQrCode'" type="button" class="text-center align-middle justify-center w-full" label="Print QR Code" />
       </div>
     </div>
   </UModal>

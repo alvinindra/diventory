@@ -1,4 +1,6 @@
 <script setup>
+import print from 'vue3-print-nb'
+
 const props = defineProps({
   show: {
     type: Boolean,
@@ -10,6 +12,28 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(['update:show', 'close'])
+const vPrint = print
+function colorStatusGood(status) {
+  let color = ''
+  switch (status) {
+    case 'Dipinjam':
+      color = 'primary'
+      break
+    case 'Dikembalikan':
+      color = 'tertiary'
+      break
+    case 'Rusak':
+      color = 'danger'
+      break
+    case 'Tersedia':
+      color = 'success'
+      break
+    default:
+      color = 'primary'
+      break
+  }
+  return color
+}
 </script>
 
 <template>
@@ -21,7 +45,7 @@ const emit = defineEmits(['update:show', 'close'])
         </div>
         <UIcon name="i-heroicons-x-mark" class="w-6 h-6 ms-auto my-auto cursor-pointer" @click="emit('close')" />
       </div>
-      <div class="p-4">
+      <div id="printData" class="p-4">
         <div>
           <div class="mb-4">
             <div class="text-sm text-diventory-black-secondary mb-1">
@@ -52,7 +76,7 @@ const emit = defineEmits(['update:show', 'close'])
               <div class="text-sm text-diventory-black-secondary mb-1">
                 Status Barang
               </div>
-              <BaseBadge :title="selectedGood?.status_barang" />
+              <BaseBadge :title="selectedGood?.status_barang" :color="colorStatusGood(selectedGood?.status_barang)" />
             </div>
             <!-- <div>
               <div class="text-sm text-diventory-black-secondary">
@@ -70,9 +94,8 @@ const emit = defineEmits(['update:show', 'close'])
         </div>
       </div>
       <div class="p-4 border border-top border- border-solid">
-        <div class="grid grid-cols-2 gap-3">
-          <UButton type="button" class="text-center align-middle justify-center" variant="outline" label="Print QR Code" />
-          <UButton type="button" class="text-center align-middle justify-center" label="Print Data" />
+        <div class="grid grid-cols-1 gap-3">
+          <UButton v-print="'#printData'" type="button" class="text-center align-middle justify-center" label="Print Data" />
         </div>
       </div>
     </div>

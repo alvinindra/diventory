@@ -68,6 +68,9 @@ function colorStatusGood(status) {
     case 'Rusak':
       color = 'danger'
       break
+    case 'Ready':
+      color = 'success'
+      break
     case 'Tersedia':
       color = 'success'
       break

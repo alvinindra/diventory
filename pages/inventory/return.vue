@@ -8,6 +8,54 @@ useHead({
 })
 
 const returnSuccess = ref(false)
+const selectedGood = ref(null)
+
+const userData = process.client && JSON.parse(window.localStorage.getItem('userData'))
+const { data: dataGoods } = await useCustomFetch(`/api/pengembalian/${userData?.id}`, { method: 'GET' })
+
+async function returnGood() {
+  const { status, error } = await useCustomFetch('/api/pengembalian', { method: 'PUT', body: {
+    id: selectedGood.value.id,
+  } })
+
+  if (status.value === 'success')
+    returnSuccess.value = true
+
+  if (error.value) {
+    console.error(error.value)
+    toast.add({ icon: 'i-heroicons-x-circle-solid', color: 'red', title: 'Gagal meminjam barang!' })
+  }
+}
+
+// function calculateDaysDifference(selectedDate) {
+//   const currentDate = new Date()
+
+//   const selectedDateObject = new Date(selectedDate)
+
+//   const timeDifference = selectedDateObject - currentDate
+
+//   const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
+//   return daysDifference
+// }
+
+// function convertDayToDuration(number) {
+//   const years = Math.floor(number / 365)
+//   const months = Math.floor((number % 365) / 30)
+//   const days = number % 30
+
+//   let result = ''
+
+//   if (years > 0)
+//     result += `${years} Tahun `
+
+//   if (months > 0)
+//     result += `${months} Bulan `
+
+//   if (days > 0)
+//     result += `${days} Hari`
+
+//   return result ? result.trim() : '-'
+// }
 </script>
 
 <template>
@@ -46,17 +94,20 @@ const returnSuccess = ref(false)
             </div>
             <img class="w-[150px] h-[150px]" src="/image/illustration-pengembalian-barang.svg" alt="Pengembalian Barang">
           </div>
-          <UForm class="space-y-4">
-            <UFormGroup label="Nama Barang" name="name">
-              <USelectMenu
-                searchable
-                searchable-placeholder="Cari nama barang yang akan dikembalikan"
-                select-class="w-full px-[14px] py-[10px] mt-2"
-                placeholder="Cari nama barang yang akan dikembalikan"
-                :options="['Macbook M2 Silver', 'Wade Cooper', 'Arlene Mccoy', 'Devon Webb', 'Tom Cook', 'Tanya Fox', 'Hellen Schmidt', 'Caroline Schultz', 'Mason Heaney', 'Claudie Smitham', 'Emil Schaefer']"
-                model-value="Macbook M2 Silver"
-              />
-            </UFormGroup>
+          <form class="space-y-4" @submit.prevent="returnGood">
+            <ClientOnly>
+              <UFormGroup label="Nama Barang" name="name">
+                <USelectMenu
+                  v-model="selectedGood"
+                  searchable
+                  searchable-placeholder="Cari nama barang yang akan dikembalikan"
+                  select-class="w-full px-[14px] py-[10px] mt-2"
+                  placeholder="Cari nama barang yang akan dikembalikan"
+                  :options="dataGoods"
+                  option-attribute=""
+                />
+              </UFormGroup>
+            </ClientOnly>
             <UFormGroup label="Durasi Peminjaman" name="duration">
               <UInput model-value="1 Tahun" disabled />
             </UFormGroup>
@@ -66,10 +117,10 @@ const returnSuccess = ref(false)
             <UFormGroup label="Tanggal Pengembalian" name="return_date">
               <UInput model-value="8 November 2023" disabled />
             </UFormGroup>
-          </UForm>
-          <UButton type="submit" class="bg-diventory-primary-600 hover:bg-diventory-primary-500 py-2 justify-center w-full text-center" @click="returnSuccess = !returnSuccess">
-            Submit
-          </UButton>
+            <UButton type="submit" class="bg-diventory-primary-600 hover:bg-diventory-primary-500 py-2 justify-center w-full text-center">
+              Submit
+            </UButton>
+          </form>
         </div>
       </div>
     </main>

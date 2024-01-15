@@ -15,9 +15,19 @@ const props = defineProps({
 })
 
 const html5QrcodeScanner = ref(null)
+const modalDetailGoods = ref(false)
+const selectedGood = ref(null)
 
-function onScanSuccess(qrCodeMessage) {
-  console.log(qrCodeMessage)
+async function onScanSuccess(qrCodeMessage) {
+  const { data: detailGood, status } = await useCustomFetch(`/api/barang/${qrCodeMessage}`, { method: 'GET' })
+
+  if (status.value === 'success') {
+    modalDetailGoods.value = true
+    selectedGood.value = detailGood.value
+  }
+
+  if (status.value === 'error')
+    modalDetailGoods.value = true
 }
 
 onMounted(() => {
@@ -36,4 +46,5 @@ watchEffect(() => {
 
 <template>
   <div id="qr-code-full-region" />
+  <ManageGoodsModalDetailGoods :show="modalDetailGoods" :selected-good="selectedGood" @close="modalDetailGoods = false" />
 </template>

@@ -53,6 +53,9 @@ function colorStatusPeminjaman(row) {
     case 'Dikembalikan':
       color = 'tertiary'
       break
+    case 'Done':
+      color = 'tertiary'
+      break
     default:
       color = 'primary'
       break
@@ -98,7 +101,7 @@ const showModalAccept = ref(false)
       <BaseBadge
         :color="colorStatusPeminjaman(row)"
         variant="outline"
-        :title="row.status_peminjaman"
+        :title="row.status_peminjaman === 'Done' ? 'Dikembalikan' : row.status_peminjaman"
       />
     </template>
     <template #perizinan-data>

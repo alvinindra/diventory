@@ -13,7 +13,7 @@ const props = defineProps({
     type: String,
   },
 })
-const emit = defineEmits(['update:show', 'close', 'delete'])
+const emit = defineEmits(['update:show', 'close', 'reject'])
 </script>
 
 <template>
@@ -31,7 +31,7 @@ const emit = defineEmits(['update:show', 'close', 'delete'])
       </div>
       <div class="grid grid-cols-2 gap-3">
         <UButton type="button" class="text-center align-middle justify-center" variant="outline" label="Tidak" @click="emit('close')" />
-        <UButton type="button" class="text-center align-middle justify-center" label="Ya, Tolak" @click="emit('delete')" />
+        <UButton type="button" class="text-center align-middle justify-center" label="Ya, Tolak" @click="emit('reject')" />
       </div>
     </div>
   </UModal>

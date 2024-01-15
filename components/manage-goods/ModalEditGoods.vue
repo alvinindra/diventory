@@ -1,21 +1,39 @@
-<script setup lang="ts">
-import type { FormSubmitEvent } from '#ui/types'
+<script setup>
+const props = defineProps(['show', 'selectedGood'])
+const emit = defineEmits(['update:show', 'close', 'refresh'])
 
-const props = defineProps(['show'])
-const emit = defineEmits(['update:show', 'close'])
-
-const state = reactive({
-  name: undefined,
-  serial_number: undefined,
-  type_goods: undefined,
-  status: undefined,
+const state = ref({
+  nama_barang: props.selectedGood?.nama_barang,
+  jenis_barang: props.selectedGood?.jenis_barang,
+  status_barang: props.selectedGood?.status_barang,
+  serial_number: props.selectedGood?.serial_number,
 })
+const toast = useToast()
+
+watchEffect(() => {
+  state.value = {
+    nama_barang: props.selectedGood?.nama_barang,
+    jenis_barang: props.selectedGood?.jenis_barang,
+    status_barang: props.selectedGood?.status_barang,
+    serial_number: props.selectedGood?.serial_number,
+  }
+}, [])
 
 const optionStatusGoods = ['Tersedia', 'Rusak', 'Dipinjam', 'Dikembalikan']
 
-async function onSubmit(event: FormSubmitEvent<object>) {
-  // Do something with data
-  console.log(event.data)
+async function onSubmit(event) {
+  event.preventDefault()
+  const { status, error } = await useCustomFetch(`/api/barang/${props.selectedGood?.id}/`, { method: 'PATCH', body: state.value })
+  if (status.value === 'success') {
+    toast.add({ icon: 'i-heroicons-check-badge', color: 'primary', title: 'Berhasil mengubah data barang!' })
+    emit('refresh')
+    emit('close')
+  }
+
+  if (error.value) {
+    toast.add({ icon: 'i-heroicons-x-circle-solid', color: 'red', title: 'Gagal mengubah data barang!' })
+    console.error(error.value)
+  }
 }
 </script>
 
@@ -31,18 +49,18 @@ async function onSubmit(event: FormSubmitEvent<object>) {
       <div class="p-4">
         <UForm :state="state" class="space-y-4" @submit="onSubmit">
           <UFormGroup label="Nama Barang" name="name">
-            <UInput v-model="state.name" placeholder="Masukkan nama barang" />
+            <UInput v-model="state.nama_barang" placeholder="Masukkan nama barang" />
           </UFormGroup>
           <UFormGroup label="Serial Number" name="serial_number">
             <UInput v-model="state.serial_number" type="text" placeholder="Masukkan serial number" />
           </UFormGroup>
           <UFormGroup label="Jenis Barang" name="type_goods">
-            <UInput v-model="state.type_goods" type="text" placeholder="Masukkan jenis barang" />
+            <UInput v-model="state.jenis_barang" type="text" placeholder="Masukkan jenis barang" />
           </UFormGroup>
           <UFormGroup label="Status Barang" name="status">
-            <USelectMenu v-model="state.status" :options="optionStatusGoods" size="md" placeholder="Pilih status barang" select-class="px-3 py-2" />
+            <USelectMenu v-model="state.status_barang" :options="optionStatusGoods" size="md" placeholder="Pilih status barang" select-class="px-3 py-2" />
           </UFormGroup>
-          <UFormGroup label="QR Code" name="qr_code">
+          <!-- <UFormGroup label="QR Code" name="qr_code">
             <div class="flex">
               <UButton color="gray" class="py-2 max-h-[36px] mt-2">
                 <img src="/image/icon-scan.svg">
@@ -52,11 +70,11 @@ async function onSubmit(event: FormSubmitEvent<object>) {
                 <img src="/image/dummy-qr.svg" class="w-[64px] h-[64]" alt="">
               </div>
             </div>
-          </UFormGroup>
+          </UFormGroup> -->
         </UForm>
       </div>
       <div class="flex p-4 border-top border border-solid">
-        <UButton type="submit" class="justify-center w-full text-center">
+        <UButton type="button" class="justify-center w-full text-center" @click="onSubmit">
           Simpan Data
         </UButton>
       </div>

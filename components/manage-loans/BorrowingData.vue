@@ -19,7 +19,8 @@ const columns = [{
   label: 'Perizinan',
 }]
 
-const { data: loansData } = await useCustomFetch('/api/peminjaman/', { method: 'GET' })
+const { data: loansData, refresh } = await useCustomFetch('/api/peminjaman/', { method: 'GET' })
+const toast = useToast()
 
 const selectedFilter = ref(null)
 const q = ref('')
@@ -56,6 +57,9 @@ function colorStatusPeminjaman(row) {
     case 'Done':
       color = 'tertiary'
       break
+    case 'Ditolak':
+      color = 'danger'
+      break
     default:
       color = 'primary'
       break
@@ -85,6 +89,53 @@ function convertDayToDuration(number) {
 const isQrCodeActive = ref(false)
 const showModalReject = ref(false)
 const showModalAccept = ref(false)
+const selectedData = ref(null)
+
+function showRejectModal(row) {
+  selectedData.value = row
+  showModalReject.value = true
+}
+
+function showAcceptModal(row) {
+  selectedData.value = row
+  showModalAccept.value = true
+}
+
+async function rejectLoan() {
+  const { error } = await useCustomFetch('/api/approval/', { method: 'POST', body: {
+    id: selectedData.value.id,
+    approval: 'tolak',
+  }, onResponse({ _request, response, _options }) {
+    if (response.status === 204) {
+      toast.add({ icon: 'i-heroicons-check-badge', color: 'primary', title: 'Berhasil menolak perizinan!' })
+      refresh()
+      showModalReject.value = false
+    }
+  } })
+
+  if (error.value) {
+    toast.add({ icon: 'i-heroicons-x-circle-solid', color: 'red', title: 'Gagal menolak perizinan!' })
+    console.error(error.value)
+  }
+}
+
+async function acceptLoan() {
+  const { error } = await useCustomFetch('/api/approval/', { method: 'POST', body: {
+    id: selectedData.value.id,
+    approval: 'setuju',
+  }, onResponse({ _request, response, _options }) {
+    if (response.status === 204) {
+      toast.add({ icon: 'i-heroicons-check-badge', color: 'primary', title: 'Berhasil menyetujui perizinan!' })
+      refresh()
+      showModalAccept.value = false
+    }
+  } })
+
+  if (error.value) {
+    toast.add({ icon: 'i-heroicons-x-circle-solid', color: 'red', title: 'Gagal menyetujui perizinan!' })
+    console.error(error.value)
+  }
+}
 </script>
 
 <template>
@@ -104,14 +155,17 @@ const showModalAccept = ref(false)
         :title="row.status_peminjaman === 'Done' ? 'Dikembalikan' : row.status_peminjaman"
       />
     </template>
-    <template #perizinan-data>
-      <div class="flex flex-row gap-3">
-        <UButton type="submit" class="justify-center text-center" color="red" variant="outline" @click="showModalReject = !showModalReject">
+    <template #perizinan-data="{ row }">
+      <div v-if="row.status_peminjaman === 'Waiting Approval'" class="flex flex-row gap-3">
+        <UButton type="submit" class="justify-center text-center" color="red" variant="outline" @click="showRejectModal(row)">
           Tolak
         </UButton>
-        <UButton type="submit" class="justify-center text-center" color="success" @click="showModalAccept = !showModalAccept">
+        <UButton type="submit" class="justify-center text-center" color="success" @click="showAcceptModal(row)">
           Terima
         </UButton>
+      </div>
+      <div v-else>
+        -
       </div>
     </template>
   </UTable>
@@ -135,6 +189,6 @@ const showModalAccept = ref(false)
       />
     </div>
   </UModal>
-  <BaseModalAccept :show="showModalAccept" @close="showModalAccept = false" />
-  <BaseModalReject :show="showModalReject" @close="showModalReject = false" />
+  <BaseModalAccept :show="showModalAccept" @close="showModalAccept = false" @accept="acceptLoan" />
+  <BaseModalReject :show="showModalReject" @close="showModalReject = false" @reject="rejectLoan" />
 </template>

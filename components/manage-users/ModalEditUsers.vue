@@ -11,6 +11,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:show', 'close', 'refresh'])
 const showPassword = ref(false)
+const toast = useToast()
 
 const state = ref({
   nama_lengkap: props.user?.nama_lengkap,
